@@ -10,12 +10,12 @@ body {
 }
 
 #date {
-    font-size: 1.5em; /* 日付のフォントサイズを小さくする */
+    font-size: 1em; /* 日付のフォントサイズをさらに小さくする */
 }
 
 #time {
     font-size: 3em;
-    letter-spacing: -0.05em; /* 数字とコロンの間隔を狭くする */
+    letter-spacing: -0.1em; /* 数字とコロンの間隔をさらに狭くする */
 }
 
 #clock, #pomodoro {
