@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background: white;
+}
+
+#date {
+    font-size: 2em;
+}
+
+#time {
+    font-size: 3em;
+}
+
+#clock, #pomodoro {
+    text-align: center;
+    display: none;
+}
+
+#clock.active, #pomodoro.active {
+    display: block;
+}
+
+.switch {
+    margin-top: 20px;
+}
+
+#timer {
+    font-size: 3em;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 1em;
+}
