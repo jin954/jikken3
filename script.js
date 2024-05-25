@@ -42,13 +42,15 @@ const timerDisplay = document.getElementById('timer');
 const startButton = document.getElementById('start-pomodoro');
 const resetButton = document.getElementById('reset-pomodoro');
 const setButton = document.getElementById('set-pomodoro');
+const openSettingsButton = document.getElementById('open-settings');
+const settingsDiv = document.getElementById('settings');
 const minutesInput = document.getElementById('pomodoro-minutes');
 let remainingTime = 25 * 60;
 
 function updatePomodoro() {
-    const minutes = String(Math.floor(remainingTime / 60)).padStart(2, '0');
-    const seconds = String(remainingTime % 60).padStart(2, '0');
-    timerDisplay.textContent = `${minutes}:${seconds}`;
+    const minutes = Math.floor(remainingTime / 60);
+    const seconds = remainingTime % 60;
+    timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     if (remainingTime > 0) {
         remainingTime--;
     } else {
@@ -70,7 +72,12 @@ resetButton.addEventListener('click', () => {
 
 setButton.addEventListener('click', () => {
     remainingTime = parseInt(minutesInput.value) * 60;
+    settingsDiv.style.display = 'none';
     updatePomodoro();
+});
+
+openSettingsButton.addEventListener('click', () => {
+    settingsDiv.style.display = settingsDiv.style.display === 'none' ? 'block' : 'none';
 });
 
 updatePomodoro();
