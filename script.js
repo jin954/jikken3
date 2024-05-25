@@ -7,12 +7,12 @@ function updateClock() {
     const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
     const weekDay = weekDays[now.getDay()];
 
-    const hours = now.getHours(); // 24時間表記だが、09までの0を削除
+    const hours = now.getHours(); 
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
 
     const formattedDate = `${year}/${month}/${day}/(${weekDay})`;
-    const formattedTime = `${hours}：${minutes}：${seconds}`;
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
 
     document.getElementById('date').textContent = formattedDate;
     document.getElementById('time').textContent = formattedTime;
