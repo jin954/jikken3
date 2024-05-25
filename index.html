@@ -7,27 +7,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="container">
-        <div class="switch">
-            <label>
-                <input type="radio" name="mode" value="clock" checked> 時計
-            </label>
-            <label>
-                <input type="radio" name="mode" value="pomodoro"> ポモドーロ
-            </label>
-        </div>
-        <div id="clock" class="active">
-            <div id="date"></div>
-            <div id="time"></div>
-        </div>
-        <div id="pomodoro">
-            <div id="timer">25:00</div>
-            <input type="number" id="pomodoro-minutes" value="25" min="1" max="60"> 分
-            <button id="set-pomodoro">設定</button>
-            <button id="start-pomodoro">開始</button>
-            <button id="reset-pomodoro">リセット</button>
-        </div>
+    <div id="clock" class="active">
+        <div id="date"></div>
+        <div id="time"></div>
     </div>
+
+    <div id="pomodoro">
+        <div id="timer">25:00</div>
+        <input type="number" id="pomodoro-minutes" value="25" min="1" max="60"> 分
+        <button id="set-pomodoro">設定</button>
+        <button id="start-pomodoro">開始</button>
+        <button id="reset-pomodoro">リセット</button>
+    </div>
+
+    <div class="switch">
+        <label>
+            <input type="radio" name="mode" value="clock" checked> 時計
+        </label>
+        <label>
+            <input type="radio" name="mode" value="pomodoro"> ポモドーロ
+        </label>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
