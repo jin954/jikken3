@@ -14,10 +14,13 @@
 
     <div id="pomodoro">
         <div id="timer">25:00</div>
-        <input type="number" id="pomodoro-minutes" value="25" min="1" max="60"> 分
-        <button id="set-pomodoro">設定</button>
         <button id="start-pomodoro">開始</button>
         <button id="reset-pomodoro">リセット</button>
+        <button id="open-settings">⚙️</button>
+        <div id="settings" style="display: none;">
+            <input type="number" id="pomodoro-minutes" value="25" min="1" max="60"> 分
+            <button id="set-pomodoro">設定</button>
+        </div>
     </div>
 
     <div class="switch">
