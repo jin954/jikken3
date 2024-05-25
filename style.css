@@ -10,7 +10,7 @@ body {
 }
 
 #date {
-    font-size: 0.75em; /* 日付のフォントサイズをさらに小さくする */
+    font-size: 1em; /* 日付のフォントサイズをほんの少し大きくする */
 }
 
 #time {
@@ -41,6 +41,17 @@ body {
 
 button {
     margin: 5px;
-    padding: 10px 20px;
-    font-size: 1em;
+    padding: 5px 10px; /* ボタンを小さくする */
+    font-size: 0.9em; /* フォントサイズを小さくする */
+}
+
+#open-settings {
+    font-size: 1.5em; /* 歯車マークを大きくする */
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#settings {
+    margin-top: 10px;
 }
