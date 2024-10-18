@@ -3,33 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clock and Pomodoro Timer</title>
+    <title>画像スライダーウィジェット</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="clock" class="active">
-        <div id="date"></div>
-        <div id="time"></div>
+    <div class="image-container" id="imageContainer">
+        <img src="" id="currentImage" class="image" alt="画像表示エリア">
+    </div>
+    <div class="control-buttons">
+        <span class="triangle-button" onclick="prevImage()">&#9664;</span>
+        <span class="triangle-button" onclick="openSettings()">&#9679;</span>
+        <span class="triangle-button" onclick="nextImage()">&#9654;</span>
     </div>
 
-    <div id="pomodoro">
-        <div id="timer">25:00</div>
-        <button id="start-pomodoro">開始</button>
-        <button id="reset-pomodoro">リセット</button>
-        <button id="open-settings">⚙️</button>
-        <div id="settings" style="display: none;">
-            <input type="number" id="pomodoro-minutes" value="25" min="1" max="60"> 分
-            <button id="set-pomodoro">設定</button>
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeSettings()">&times;</span>
+            <h2>設定</h2>
+            <label for="uploadImage">画像をアップロード:</label>
+            <input type="file" id="uploadImage" accept="image/*" multiple>
+            <br>
+            <label for="displayTime">画像表示時間 (時間):</label>
+            <input type="number" id="displayTime" min="1" max="24" value="12">
+            <br>
+            <button onclick="saveSettings()">設定を保存</button>
         </div>
-    </div>
-
-    <div class="switch">
-        <label>
-            <input type="radio" name="mode" value="clock" checked> 時計
-        </label>
-        <label>
-            <input type="radio" name="mode" value="pomodoro"> ポモドーロ
-        </label>
     </div>
 
     <script src="script.js"></script>
