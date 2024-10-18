@@ -50,10 +50,10 @@ function closeSettings() {
 function updateImageList() {
     const imageList = document.getElementById("imageList");
     imageList.innerHTML = ""; // リストをクリア
-    images.forEach((image, index) => {
+    images.forEach((_, index) => {
         const div = document.createElement("div");
         div.className = "image-item";
-        div.innerHTML = `画像${index + 1}: <span>${image}</span>
+        div.innerHTML = `画像${index + 1} 
             <button onclick="moveImageUp(${index})">↑</button>
             <button onclick="moveImageDown(${index})">↓</button>
             <button onclick="deleteImage(${index})">削除</button>`;
@@ -108,9 +108,7 @@ function saveSettings() {
     }
 
     // 表示時間を設定する
-    if (timeInput >= 1 && timeInput <= 24) {
-        displayTime = timeInput * 60 * 60 * 1000; // 時間をミリ秒に変換
-    }
+    displayTime = timeInput * 60 * 1000; // 分をミリ秒に変換
 
     closeSettings();
     resetTimer();
