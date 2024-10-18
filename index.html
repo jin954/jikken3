@@ -20,15 +20,28 @@
         <div class="modal-content">
             <span class="close-button" onclick="closeSettings()">&times;</span>
             <h2>設定</h2>
-            <label for="uploadImage">画像をアップロード:</label>
-            <input type="file" id="uploadImage" accept="image/*" multiple>
-            <br>
-            <label for="displayTime">画像表示時間 (時間):</label>
-            <input type="number" id="displayTime" min="1" max="24" value="12">
-            <br>
-            <button onclick="saveSettings()">設定を保存</button>
+            <div class="settings-row">
+                <label for="displayTime">画像表示時間:</label>
+                <select id="displayTime">
+                    <option value="1">1分</option>
+                    <option value="5">5分</option>
+                    <option value="10">10分</option>
+                    <option value="30">30分</option>
+                    <option value="60">1時間</option>
+                    <option value="120">2時間</option>
+                    <option value="240">4時間</option>
+                    <option value="480">8時間</option>
+                    <option value="720">12時間</option>
+                    <option value="1440">24時間</option>
+                </select>
+                <button onclick="saveSettings()">保存</button>
+            </div>
+            <div class="settings-row">
+                <label for="uploadImage">画像をアップロード:</label>
+                <input type="file" id="uploadImage" accept="image/*" multiple>
+            </div>
             <h3>登録済み画像</h3>
-            <div id="imageList"></div>
+            <div id="imageList" class="image-list"></div>
         </div>
     </div>
 
