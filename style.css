@@ -1,57 +1,58 @@
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-    background: white;
-}
-
-#date {
-    font-size: 1em; /* 日付のフォントサイズをほんの少し大きくする */
-}
-
-#time {
-    font-size: 3em;
-    letter-spacing: -0.05em; /* 数字とコロンの間隔をほんの少し広くする */
-}
-
-#clock, #pomodoro {
+    background-color: #f0f0f0;
     text-align: center;
-    display: none;
+    margin: 0;
+    padding: 0;
 }
 
-#clock.active, #pomodoro.active {
-    display: block;
+.image-container {
+    border: 2px solid black;
+    width: 600px;
+    height: 400px;
+    margin: 20px auto;
+    position: relative;
+    background-color: #fff;
 }
 
-.switch {
-    margin-top: 20px;
+.image {
+    width: 100%;
+    height: 100%;
 }
 
-.switch label {
-    margin-right: 10px;
-}
-
-#timer {
-    font-size: 3em;
-}
-
-button {
-    margin: 5px;
-    padding: 5px 10px; /* ボタンを小さくする */
-    font-size: 0.9em; /* フォントサイズを小さくする */
-}
-
-#open-settings {
-    font-size: 1.5em; /* 歯車マークを大きくする */
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-#settings {
+.control-buttons {
+    text-align: center;
     margin-top: 10px;
+}
+
+.triangle-button {
+    cursor: pointer;
+    font-size: 24px;
+    margin: 0 10px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+}
+
+.close-button {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
 }
