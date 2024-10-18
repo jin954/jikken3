@@ -53,11 +53,12 @@ body {
     text-align: left;
     max-height: 80%;
     overflow-y: auto;
+    font-size: 12px; /* 文字サイズを小さくする */
 }
 
 .close-button {
     float: right;
-    font-size: 28px;
+    font-size: 20px; /* 閉じるボタンも少し小さく */
     font-weight: bold;
     cursor: pointer;
 }
@@ -67,6 +68,17 @@ body {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
+    font-size: 12px; /* 設定項目の文字サイズを小さくする */
+}
+
+.upload-section {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#fileInput {
+    display: block;
+    margin: 5px auto;
 }
 
 #imageList {
@@ -81,4 +93,10 @@ body {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 5px;
+    font-size: 12px; /* 登録済み画像の項目も文字サイズを小さくする */
+}
+
+button {
+    font-size: 12px; /* ボタンの文字サイズを小さくする */
+    margin-top: 5px;
 }
