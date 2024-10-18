@@ -51,6 +51,8 @@ body {
     border: 1px solid #888;
     width: 300px;
     text-align: left;
+    max-height: 80%;
+    overflow-y: auto;
 }
 
 .close-button {
@@ -60,8 +62,18 @@ body {
     cursor: pointer;
 }
 
+.settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
 #imageList {
-    margin-top: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
 }
 
 .image-item {
