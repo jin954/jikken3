@@ -1,29 +1,57 @@
-<div id="settingsModal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <div class="settings-row">
-            <label for="displayTime">画像表示時間：</label>
-            <select id="displayTime">
-                <!-- 1分～24時間のオプションを追加 -->
-                <option value="1">1分</option>
-                <option value="5">5分</option>
-                <option value="10">10分</option>
-                <option value="30">30分</option>
-                <option value="60">1時間</option>
-                <option value="120">2時間</option>
-                <!-- 以下省略、最大24時間まで -->
-            </select>
-            <button id="saveDisplayTime">保存</button>
-        </div>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像スライドショー</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="image-container">
+        <img id="displayImage" src="default-image.png" alt="画像を登録して下さい" class="image">
+    </div>
 
-        <div class="upload-section">
-            <p>画像をアップロード</p>
-            <input type="file" id="fileInput" accept="image/*">
-            <button id="uploadButton">登録</button>
-        </div>
+    <div class="control-buttons">
+        <span class="triangle-button" id="prevImage">&lt;</span>
+        <span class="triangle-button" id="settingsButton">⚙️</span>
+        <span class="triangle-button" id="nextImage">&gt;</span>
+    </div>
 
-        <div id="imageList">
-            <!-- 登録済み画像がここに表示される -->
+    <!-- モーダルウィンドウ -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <span class="close-button" id="closeModal">&times;</span>
+            <h3>設定</h3>
+
+            <!-- 画像表示時間の設定 -->
+            <div class="settings-row">
+                <label for="displayTime">画像表示時間：</label>
+                <select id="displayTime">
+                    <!-- 1分から1440分（24時間）まで1分刻みで設定 -->
+                    <script>
+                        for (let i = 1; i <= 1440; i++) {
+                            document.write(`<option value="${i}">${i}分</option>`);
+                        }
+                    </script>
+                </select>
+                <button id="saveDisplayTime">保存</button>
+            </div>
+
+            <!-- 画像アップロード -->
+            <div class="upload-section">
+                <label for="fileInput">画像をアップロード：</label>
+                <input type="file" id="fileInput" accept="image/*">
+                <button id="uploadButton">アップロード</button>
+            </div>
+
+            <!-- 登録済み画像リスト -->
+            <div id="imageList" class="image-list">
+                <p>登録済み画像：</p>
+                <!-- ここに登録済み画像がリスト表示される -->
+            </div>
         </div>
     </div>
-</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
