@@ -1,50 +1,29 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画像スライダーウィジェット</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="image-container" id="imageContainer">
-        <img src="スクリーンショット 2024-10-18 094230.png" id="currentImage" class="image" alt="画像表示エリア">
-    </div>
-    <div class="control-buttons">
-        <span class="triangle-button" onclick="prevImage()">&#9664;</span>
-        <span class="triangle-button" onclick="openSettings()">&#9679;</span>
-        <span class="triangle-button" onclick="nextImage()">&#9654;</span>
-    </div>
+<div id="settingsModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <div class="settings-row">
+            <label for="displayTime">画像表示時間：</label>
+            <select id="displayTime">
+                <!-- 1分～24時間のオプションを追加 -->
+                <option value="1">1分</option>
+                <option value="5">5分</option>
+                <option value="10">10分</option>
+                <option value="30">30分</option>
+                <option value="60">1時間</option>
+                <option value="120">2時間</option>
+                <!-- 以下省略、最大24時間まで -->
+            </select>
+            <button id="saveDisplayTime">保存</button>
+        </div>
 
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeSettings()">&times;</span>
-            <h2>設定</h2>
-            <div class="settings-row">
-                <label for="displayTime">画像表示時間:</label>
-                <select id="displayTime">
-                    <option value="1">1分</option>
-                    <option value="5">5分</option>
-                    <option value="10">10分</option>
-                    <option value="30">30分</option>
-                    <option value="60">1時間</option>
-                    <option value="120">2時間</option>
-                    <option value="240">4時間</option>
-                    <option value="480">8時間</option>
-                    <option value="720">12時間</option>
-                    <option value="1440">24時間</option>
-                </select>
-                <button onclick="saveSettings()">保存</button>
-            </div>
-            <div class="settings-row">
-                <label for="uploadImage">画像をアップロード:</label>
-                <input type="file" id="uploadImage" accept="image/*" multiple>
-            </div>
-            <h3>登録済み画像</h3>
-            <div id="imageList" class="image-list"></div>
+        <div class="upload-section">
+            <p>画像をアップロード</p>
+            <input type="file" id="fileInput" accept="image/*">
+            <button id="uploadButton">登録</button>
+        </div>
+
+        <div id="imageList">
+            <!-- 登録済み画像がここに表示される -->
         </div>
     </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+</div>
