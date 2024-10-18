@@ -7,7 +7,7 @@ body {
 }
 
 .image-container {
-    border: 2px solid black;
+    border: 2px solid black; /* 枠線を戻す */
     width: 600px;
     height: 400px;
     margin: 20px auto;
@@ -48,17 +48,17 @@ body {
     background-color: #fff;
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #888;
-    width: 300px;
+    border: 1px solid #888; /* モーダルの枠線を追加 */
+    width: 320px;
     text-align: left;
     max-height: 80%;
     overflow-y: auto;
-    font-size: 12px; /* 文字サイズを小さくする */
+    font-size: 12px;
 }
 
 .close-button {
     float: right;
-    font-size: 20px; /* 閉じるボタンも少し小さく */
+    font-size: 20px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -68,7 +68,7 @@ body {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
-    font-size: 12px; /* 設定項目の文字サイズを小さくする */
+    font-size: 12px;
 }
 
 .upload-section {
@@ -93,10 +93,10 @@ body {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 5px;
-    font-size: 12px; /* 登録済み画像の項目も文字サイズを小さくする */
+    font-size: 12px;
 }
 
 button {
-    font-size: 12px; /* ボタンの文字サイズを小さくする */
+    font-size: 12px;
     margin-top: 5px;
 }
