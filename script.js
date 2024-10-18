@@ -1,83 +1,79 @@
-function updateClock() {
-    const now = new Date();
+let images = []; // 画像のURLを格納する配列
+let currentIndex = 0;
+let displayTime = 12 * 60 * 60 * 1000; // デフォルトの画像表示時間 (12時間)
+let timer;
 
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const weekDays = ["日", "月", "火", "水", "木", "金", "土"];
-    const weekDay = weekDays[now.getDay()];
-
-    const hours = now.getHours(); 
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-
-    const formattedDate = `${year}/${month}/${day}/(${weekDay})`;
-    const formattedTime = `${hours}:${minutes}:${seconds}`;
-
-    document.getElementById('date').textContent = formattedDate;
-    document.getElementById('time').textContent = formattedTime;
-}
-
-setInterval(updateClock, 1000);
-updateClock();
-
-const clockDiv = document.getElementById('clock');
-const pomodoroDiv = document.getElementById('pomodoro');
-const modeSwitch = document.querySelectorAll('input[name="mode"]');
-
-modeSwitch.forEach(radio => {
-    radio.addEventListener('change', () => {
-        if (radio.value === 'clock') {
-            clockDiv.classList.add('active');
-            pomodoroDiv.classList.remove('active');
-        } else {
-            clockDiv.classList.remove('active');
-            pomodoroDiv.classList.add('active');
-        }
-    });
-});
-
-let pomodoroInterval;
-const timerDisplay = document.getElementById('timer');
-const startButton = document.getElementById('start-pomodoro');
-const resetButton = document.getElementById('reset-pomodoro');
-const setButton = document.getElementById('set-pomodoro');
-const openSettingsButton = document.getElementById('open-settings');
-const settingsDiv = document.getElementById('settings');
-const minutesInput = document.getElementById('pomodoro-minutes');
-let remainingTime = 25 * 60;
-
-function updatePomodoro() {
-    const minutes = Math.floor(remainingTime / 60);
-    const seconds = remainingTime % 60;
-    timerDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    if (remainingTime > 0) {
-        remainingTime--;
-    } else {
-        clearInterval(pomodoroInterval);
-        alert('ポモドーロタイマーが終了しました!');
+// 画像を読み込む
+function loadImage(index) {
+    if (images.length > 0) {
+        document.getElementById("currentImage").src = images[index];
     }
 }
 
-startButton.addEventListener('click', () => {
-    clearInterval(pomodoroInterval);
-    pomodoroInterval = setInterval(updatePomodoro, 1000);
-});
+// 次の画像へ
+function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    loadImage(currentIndex);
+    resetTimer();
+}
 
-resetButton.addEventListener('click', () => {
-    clearInterval(pomodoroInterval);
-    remainingTime = parseInt(minutesInput.value) * 60;
-    updatePomodoro();
-});
+// 前の画像へ
+function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    loadImage(currentIndex);
+    resetTimer();
+}
 
-setButton.addEventListener('click', () => {
-    remainingTime = parseInt(minutesInput.value) * 60;
-    settingsDiv.style.display = 'none';
-    updatePomodoro();
-});
+// タイマーを開始
+function startTimer() {
+    timer = setTimeout(nextImage, displayTime);
+}
 
-openSettingsButton.addEventListener('click', () => {
-    settingsDiv.style.display = settingsDiv.style.display === 'none' ? 'block' : 'none';
-});
+// タイマーをリセット
+function resetTimer() {
+    clearTimeout(timer);
+    startTimer();
+}
 
-updatePomodoro();
+// 設定モーダルを開く
+function openSettings() {
+    document.getElementById("settingsModal").style.display = "block";
+}
+
+// 設定モーダルを閉じる
+function closeSettings() {
+    document.getElementById("settingsModal").style.display = "none";
+}
+
+// 設定を保存
+function saveSettings() {
+    const uploadInput = document.getElementById("uploadImage");
+    const timeInput = document.getElementById("displayTime").value;
+
+    // 画像をアップロードする
+    if (uploadInput.files.length > 0) {
+        for (const file of uploadInput.files) {
+            const url = URL.createObjectURL(file);
+            if (images.length < 30) {
+                images.push(url);
+            } else {
+                alert("画像の最大登録数は30枚です。");
+                break;
+            }
+        }
+    }
+
+    // 表示時間を設定する
+    if (timeInput >= 1 && timeInput <= 24) {
+        displayTime = timeInput * 60 * 60 * 1000; // 時間をミリ秒に変換
+    }
+
+    closeSettings();
+    resetTimer();
+}
+
+// 初期化処理
+window.onload = function() {
+    loadImage(currentIndex);
+    startTimer();
+};
