@@ -67,19 +67,36 @@ function selectMode(mode) {
 // 設定を保存
 function saveSettings() {
     if (selectedMode === 'timer') {
-        const hours = document.getElementById("timerHours").value;
-        const minutes = document.getElementById("timerMinutes").value;
-        displayTime = (parseInt(hours) * 60 + parseInt(minutes)) * 60 * 1000;
-        localStorage.setItem("displayTime", (parseInt(hours) * 60 + parseInt(minutes)));
-        resetTimer();
+        // タイマーの時刻を取得
+        const timerTime = document.getElementById("timerTime").value;
+        const [hours, minutes] = timerTime.split(":").map(Number);
+        displayTime = (hours * 60 + minutes) * 60 * 1000; // ミリ秒に変換
+        localStorage.setItem("displayTime", (hours * 60 + minutes)); 
+        resetTimer(); // タイマーをリセットして再スタート
     } else if (selectedMode === 'alarm') {
-        const alarmDays = document.getElementById("alarmDays").value;
-        const alarmTime = document.getElementById("alarmTime").value;
-        // アラーム時刻の計算ロジック
-        alert(`アラーム設定: ${alarmDays}日後の${alarmTime}`);
-        // アラームの設定ロジック
+        // アラームの時刻を取得
+        alarmTime = document.getElementById("alarmTime").value;
+        localStorage.setItem("alarmTime", alarmTime); // アラーム時刻を保存
+        alert(`毎日 ${alarmTime} に画像が切り替わります`);
+        startAlarmCheck(); // アラームチェックを開始
     }
 }
+
+// アラームチェック関数
+function startAlarmCheck() {
+    const now = new Date();
+    const currentHours = now.getHours();
+    const currentMinutes = now.getMinutes();
+    
+    const [alarmHours, alarmMinutes] = alarmTime.split(":").map(Number);
+
+    if (currentHours === alarmHours && currentMinutes === alarmMinutes) {
+        nextImage(); // アラーム時刻に画像を次に切り替える
+    }
+
+    setTimeout(startAlarmCheck, 60000); // 1分おきに再チェック
+}
+
 
 // 画像をアップロードして保存
 function saveImages() {
