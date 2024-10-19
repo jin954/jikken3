@@ -76,7 +76,7 @@ body {
 }
 
 .settings-row input[type="number"] {
-    width: 45px; /* 数値入力フィールドを小さくする */
+    width: 50px; /* 数値入力フィールドを小さくする */
 }
 
 #imageListContainer {
