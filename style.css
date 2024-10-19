@@ -7,12 +7,12 @@ body {
 }
 
 .image-container {
-    border: 2px solid black; /* 枠線を戻す */
+    border: 2px solid black;
     width: 600px;
     height: 400px;
     margin: 20px auto;
     position: relative;
-    background-color: #fff;
+    background-color: white; /* 背景を白に変更 */
     overflow: hidden;
 }
 
@@ -29,8 +29,11 @@ body {
 
 .triangle-button {
     cursor: pointer;
-    font-size: 24px;
-    margin: 0 10px;
+    font-size: 60px; /* ボタンのサイズを大きく */
+    margin: 0 5px;
+    padding: 5px 10px; /* ボタンの内側の余白を調整 */
+    width: 45px; /* ボタン自体の幅を大きくする */
+    height: 45px; /* ボタン自体の高さを大きくする */
 }
 
 .modal {
@@ -46,57 +49,87 @@ body {
 
 .modal-content {
     background-color: #fff;
-    margin: 15% auto;
+    margin: 10% auto;
     padding: 20px;
-    border: 1px solid #888; /* モーダルの枠線を追加 */
-    width: 320px;
+    border: 1px solid #888;
+    width: 350px;
     text-align: left;
-    max-height: 80%;
-    overflow-y: auto;
-    font-size: 12px;
+}
+
+.modal-content h2 {
+    text-align: center; /* 中央に配置 */
+    margin: 20px 0; /* 上下のマージンを追加 */
 }
 
 .close-button {
     float: right;
-    font-size: 20px;
+    font-size: 28px;
     font-weight: bold;
     cursor: pointer;
 }
 
 .settings-row {
     display: flex;
+    justify-content: flex-start; /* 横方向に左揃え */
     align-items: center;
-    justify-content: space-between;
     margin-bottom: 10px;
-    font-size: 12px;
 }
 
-.upload-section {
-    margin-bottom: 10px;
-    text-align: center;
+.settings-row input[type="number"] {
+    width: 25px; /* 数値入力フィールドを小さくする */
 }
 
-#fileInput {
-    display: block;
-    margin: 5px auto;
-}
-
-#imageList {
+#imageListContainer {
     max-height: 200px;
     overflow-y: auto;
-    border: 1px solid #ddd;
-    padding: 10px;
+    border: 1px solid #ccc;
+    padding: 5px;
 }
 
 .image-item {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; /* 左右に揃える */
+    align-items: center; /* 上下の中央揃え */
     margin-bottom: 5px;
-    font-size: 12px;
 }
 
-button {
-    font-size: 12px;
-    margin-top: 5px;
+.image-item-buttons {
+    display: flex;
+    justify-content: flex-end; /* 右端に揃える */
+    gap: 0; /* ボタン同士のスペースをなくす */
+}
+
+.timer-settings, .alarm-settings {
+    margin-top: 10px; /* 各セクション間にスペースを追加 */
+}
+
+#uploadImage {
+    margin-bottom: 20px; /* ファイル選択と画像リストの間に余白を追加 */
+}
+
+/* 既存のCSSコードの後に追加 */
+.timer-settings, .alarm-settings {
+    margin-top: 10px; /* 各セクション間にスペースを追加 */
+}
+
+#uploadImage {
+    margin-bottom: 20px; /* ファイル選択と画像リストの間に余白を追加 */
+}
+
+/* 以下に追加 */
+.settings-row label,
+.settings-row button {
+    margin-right: 10px; /* 各要素の右側に10pxのマージンを追加 */
+}
+
+.settings-row button:last-child {
+    margin-right: 0; /* 最後のボタンにはマージンを適用しない */
+}
+
+#alarmDays {
+    width: 50px; /* アラーム日数フィールドの幅 */
+}
+
+#alarmTime {
+    width: 50px; /* アラーム時刻フィールドの幅 */
 }
