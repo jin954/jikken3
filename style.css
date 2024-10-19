@@ -127,7 +127,7 @@ body {
 
 /* 既存のCSSの下に追加 */
 .input-time {
-    width: 40px; /* 同じ幅を指定 */
+    width: 70px; /* 同じ幅を指定 */
     text-align: center; /* 文字を中央に配置 */
     margin-right: 10px; /* ラベルとのスペース */
 }
