@@ -107,11 +107,6 @@ body {
     margin-bottom: 20px; /* ファイル選択と画像リストの間に余白を追加 */
 }
 
-/* 既存のCSSコードの後に追加 */
-.timer-settings, .alarm-settings {
-    margin-top: 10px; /* 各セクション間にスペースを追加 */
-}
-
 #uploadImage {
     margin-bottom: 20px; /* ファイル選択と画像リストの間に余白を追加 */
 }
@@ -128,4 +123,16 @@ body {
 
 #alarmTime {
     width: 70px; /* アラーム時刻フィールドの幅 */
+}
+
+/* 既存のCSSの下に追加 */
+.input-time {
+    width: 40px; /* 同じ幅を指定 */
+    text-align: center; /* 文字を中央に配置 */
+    margin-right: 10px; /* ラベルとのスペース */
+}
+
+/* 既存のCSSコードの後に追加 */
+.timer-settings, .alarm-settings {
+    margin-top: 10px; /* 各セクション間にスペースを追加 */
 }
