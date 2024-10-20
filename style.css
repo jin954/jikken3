@@ -24,12 +24,12 @@ body {
 
 .control-buttons {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 40px;
 }
 
 .triangle-button {
     cursor: pointer;
-    font-size: 60px;
+    font-size: 50px;
     margin: 0 5px;
     padding: 5px 10px;
     width: 45px;
@@ -74,8 +74,9 @@ body {
 
 .alarm-settings {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* 要素を左揃えにする */
     align-items: center;
+    gap: 5px; /* 各要素の間に10pxのスペースを作る */
 }
 
 .image-item {
