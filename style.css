@@ -100,8 +100,15 @@ body {
 }
 
 .timer-settings, .alarm-settings {
+    display: flex; /* フレックスボックスを使用 */
+    align-items: center; /* 垂直方向に中央揃え */
     margin-top: 10px; /* 各セクション間にスペースを追加 */
 }
+
+.timer-settings button, .alarm-settings button {
+    margin-left: 10px; /* ボタンの左側にマージンを追加 */
+}
+
 
 #uploadImage {
     margin-bottom: 20px; /* ファイル選択と画像リストの間に余白を追加 */
