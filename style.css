@@ -110,9 +110,9 @@ body {
     width: 120px;
     margin-left: 10px; /* ボタンとラベルの間にスペース */
     padding: 1px 3px; /* 内側の余白を調整 */
-    font-size: 12px; /* 文字サイズを調整 */
-    border-radius: 0px; /* 角を丸める */
-    border: 1px solid #ccc; /* 枠線のスタイルを指定 */
+    font-size: 13px; /* 文字サイズを調整 */
+    border-radius: 3px; /* 角を丸める */
+    border: 2px solid #ccc; /* 枠線のスタイルを指定 */
     background-color: #f0f0f0; /* 背景色を指定 */
     cursor: pointer; /* マウスカーソルをポインターにする */
 }
