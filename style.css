@@ -87,10 +87,6 @@ body {
     margin-left: 5px;
 }
 
-.modal-content h2 {
-    text-align: center; /* タイトルを中央揃えにする */
-    margin: 20px 0; /* 上下のマージンを追加 */
-}
 
 .modal-content button:last-child {
     display: inline-block; /* インラインブロックにしてサイズを調整 */
