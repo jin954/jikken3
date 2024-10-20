@@ -86,3 +86,8 @@ body {
 .image-item-buttons button {
     margin-left: 5px;
 }
+
+.modal-content h2 {
+    text-align: center; /* タイトルを中央揃えにする */
+    margin: 20px 0; /* 上下のマージンを追加 */
+}
