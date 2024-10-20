@@ -92,10 +92,12 @@ body {
     margin: 20px 0; /* 上下のマージンを追加 */
 }
 
-.modal-content close-button {
-    display: block; /* ブロック要素にすることで幅いっぱいに使う */
-    margin: 20px auto; /* 上下に余白を追加し、自動で左右中央に配置 */
+.modal-content button:last-child {
+    display: block; /* ブロック要素にして幅を調整 */
+    margin: 20px auto; /* 上下に余白を与え、左右を自動で配置 */
     width: 100px; /* ボタンの幅を指定 */
     padding: 10px; /* ボタンの内側の余白 */
     cursor: pointer; /* カーソルをポインターに */
+    text-align: center; /* テキストを中央に配置 */
 }
+
