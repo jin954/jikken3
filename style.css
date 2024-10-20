@@ -86,10 +86,3 @@ body {
 .image-item-buttons button {
     margin-left: 5px;
 }
-
-.modal-content button:last-child {
-    display: inline-block; /* インラインブロックにしてサイズを調整 */
-    margin: 20px auto; /* 上下に余白を与え、左右を自動で配置 */
-    text-align: center; /* テキストを中央に配置 */
-}
-
