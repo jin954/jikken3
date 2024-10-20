@@ -62,6 +62,12 @@ body {
     cursor: pointer;
 }
 
+.close-button-bottom {
+    display: block; /* ボタンをブロック要素にする */
+    margin: 20px auto; /* 上下の余白を与え、中央に配置 */
+    /* 他のスタイルも必要に応じて追加 */
+}
+
 .input-time {
     width: 100px;
 }
