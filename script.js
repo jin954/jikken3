@@ -1,8 +1,5 @@
 let images = JSON.parse(localStorage.getItem("images")) || [];
 let currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
-let displayTime = (localStorage.getItem("displayTime") || 0) * 60 * 1000;
-let timer;
-let selectedMode = 'timer';
 let alarmTime = localStorage.getItem("alarmTime") || '';
 let alarmCheckInterval;
 
@@ -21,26 +18,12 @@ function nextImage() {
     currentIndex = (currentIndex + 1) % (images.length || 1);
     localStorage.setItem("currentIndex", currentIndex);
     loadImage(currentIndex);
-    resetTimer();
 }
 
 function prevImage() {
     currentIndex = (currentIndex - 1 + (images.length || 1)) % (images.length || 1);
     localStorage.setItem("currentIndex", currentIndex);
     loadImage(currentIndex);
-    resetTimer();
-}
-
-function startTimer() {
-    clearTimeout(timer);
-    if (displayTime > 0) {
-        timer = setTimeout(nextImage, displayTime);
-    }
-}
-
-function resetTimer() {
-    clearTimeout(timer);
-    startTimer();
 }
 
 function openSettings() {
@@ -52,39 +35,15 @@ function closeSettings() {
     document.getElementById("settingsModal").style.display = "none";
 }
 
-function selectMode(mode) {
-    selectedMode = mode;
-    if (mode === 'timer') {
-        document.querySelector('.timer-settings').style.display = 'block';
-        document.querySelector('.alarm-settings').style.display = 'none';
-    } else {
-        document.querySelector('.timer-settings').style.display = 'none';
-        document.querySelector('.alarm-settings').style.display = 'block';
-    }
-}
-
 function saveSettings() {
-    if (selectedMode === 'timer') {
-        const timerTime = document.getElementById("timerTime").value;
-        const [hours, minutes] = timerTime.split(":").map(Number);
-        displayTime = (hours * 60 + minutes) * 60 * 1000;
-        localStorage.setItem("displayTime", (hours * 60 + minutes));
-        resetTimer();
+    alarmTime = document.getElementById("alarmTime").value;
+    localStorage.setItem("alarmTime", alarmTime);
+    alert(`毎日 ${alarmTime} に画像が切り替わります`);
+    startAlarmCheck();
 
-        document.getElementById("saveTimer").textContent = "設定済み";
-        document.getElementById("saveTimer").disabled = true;
-        document.getElementById("resetTimer").style.display = "inline";
-
-    } else if (selectedMode === 'alarm') {
-        alarmTime = document.getElementById("alarmTime").value;
-        localStorage.setItem("alarmTime", alarmTime);
-        alert(`毎日 ${alarmTime} に画像が切り替わります`);
-        startAlarmCheck();
-
-        document.getElementById("saveAlarm").textContent = "設定済み";
-        document.getElementById("saveAlarm").disabled = true;
-        document.getElementById("resetAlarm").style.display = "inline";
-    }
+    document.getElementById("saveAlarm").textContent = "設定済み";
+    document.getElementById("saveAlarm").disabled = true;
+    document.getElementById("resetAlarm").style.display = "inline";
 }
 
 function startAlarmCheck() {
@@ -101,23 +60,16 @@ function startAlarmCheck() {
 }
 
 function resetSettings() {
-    if (selectedMode === 'timer') {
-        localStorage.removeItem("displayTime");
-        displayTime = 0;
-    } else if (selectedMode === 'alarm') {
-        localStorage.removeItem("alarmTime");
-        alarmTime = '';
-        clearTimeout(alarmCheckInterval);
-    }
-
-    clearTimeout(timer);
+    localStorage.removeItem("alarmTime");
+    alarmTime = '';
+    clearTimeout(alarmCheckInterval);
     loadImage(currentIndex);
 
-    const saveButton = selectedMode === 'timer' ? document.getElementById("saveTimer") : document.getElementById("saveAlarm");
+    const saveButton = document.getElementById("saveAlarm");
     saveButton.textContent = "保存";
     saveButton.disabled = false;
 
-    const resetButton = selectedMode === 'timer' ? document.getElementById("resetTimer") : document.getElementById("resetAlarm");
+    const resetButton = document.getElementById("resetAlarm");
     resetButton.style.display = "none";
 }
 
@@ -201,20 +153,6 @@ function deleteImage(index) {
 window.onload = function () {
     currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
     loadImage(currentIndex);
-
-    const savedDisplayTime = localStorage.getItem("displayTime");
-    if (savedDisplayTime) {
-        displayTime = savedDisplayTime * 60 * 1000;
-        startTimer();
-        document.getElementById("saveTimer").textContent = "設定済み";
-        document.getElementById("saveTimer").disabled = true;
-        document.getElementById("resetTimer").style.display = "inline";
-        
-        // タイマーの時間入力欄を更新する
-        const hours = Math.floor(savedDisplayTime / 60);
-        const minutes = savedDisplayTime % 60;
-        document.getElementById("timerTime").value = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-    }
 
     const savedAlarmTime = localStorage.getItem("alarmTime");
     if (savedAlarmTime) {
