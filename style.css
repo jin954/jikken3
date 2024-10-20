@@ -98,3 +98,15 @@ body {
     text-align: center; /* タイトルを中央揃えにする */
     margin: 20px 0; /* 上下のマージンを追加 */
 }
+
+.file-upload-container {
+    display: flex; /* Flexboxを使用 */
+    align-items: center; /* 縦方向の中央揃え */
+    justify-content: flex-start; /* 左寄せ */
+    margin-bottom: 20px; /* 下の余白 */
+}
+
+.file-upload-container button {
+    margin-left: 10px; /* ボタンとラベルの間にスペース */
+}
+
