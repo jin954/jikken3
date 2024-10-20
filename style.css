@@ -76,7 +76,7 @@ body {
     display: flex;
     justify-content: flex-start; /* 要素を左揃えにする */
     align-items: center;
-    gap: 5px; /* 各要素の間に10pxのスペースを作る */
+    gap: 10px; /* 各要素の間に10pxのスペースを作る */
 }
 
 .image-item {
