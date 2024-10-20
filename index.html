@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .file-upload-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; /* Flexboxを使用 */
+            align-items: center; /* 縦方向の中央揃え */
+            justify-content: flex-start; /* 左寄せ */
+            margin-bottom: 20px; /* 下の余白 */
         }
-        
+
         .file-upload-container button {
-            margin-right: 10px;
+            margin-left: 10px; /* ボタンとラベルの間にスペース */
         }
     </style>
 </head>
@@ -43,8 +44,8 @@
             <br>
 
             <!-- 画像アップロードセクション -->
-            <label for="uploadImage">画像 :</label>
             <div class="file-upload-container">
+                <label for="uploadImage">画像 :</label>
                 <input type="file" id="uploadImage" accept="image/*" multiple style="display:none;" onchange="autoSaveImages()">
                 <button type="button" onclick="document.getElementById('uploadImage').click()">ファイルを選択</button>
             </div>
