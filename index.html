@@ -29,19 +29,21 @@
                 <button onclick="selectMode('alarm')">アラーム</button>
             </div>
 
-               <!-- タイマー設定 -->
-                  <div class="timer-settings">
-                  <label>タイマー: </label>
-                  <input type="time" id="timerTime" class="input-time" value="00:00"> <!-- 修正箇所 -->
-                  <button id="saveTimer">保存</button> <!-- 保存ボタンを追加 -->
-               </div>
+<!-- タイマー設定 -->
+<div class="timer-settings">
+    <label>タイマー: </label>
+    <input type="time" id="timerTime" class="input-time" value="00:00">
+    <button id="saveTimer" onclick="saveSettings()">保存</button> <!-- 保存ボタン -->
+    <button id="resetTimer" style="display:none;" onclick="resetSettings()">リセット</button> <!-- リセットボタン追加 -->
+</div>
 
-               <!-- アラーム設定 -->
-                  <div class="alarm-settings" style="display:none;">
-                  <label>アラーム: </label>
-                  <input type="time" id="alarmTime" class="input-time" value="00:00"> <!-- 修正箇所 -->
-                  <button id="saveAlarm">保存</button> <!-- 保存ボタンを追加 -->
-              </div>
+<!-- アラーム設定 -->
+<div class="alarm-settings" style="display:none;">
+    <label>アラーム: </label>
+    <input type="time" id="alarmTime" class="input-time" value="00:00">
+    <button id="saveAlarm" onclick="saveSettings()">保存</button> <!-- 保存ボタン -->
+    <button id="resetAlarm" style="display:none;" onclick="resetSettings()">リセット</button> <!-- リセットボタン追加 -->
+</div>
 
             
             <br>
