@@ -92,10 +92,8 @@ body {
     margin: 20px 0; /* 上下のマージンを追加 */
 }
 
-.close-button-center {
-    display: block; /* ブロック要素にする */
+.modal-content button:last-child {
+    display: inline-block; /* インラインブロックにしてサイズを調整 */
     margin: 20px auto; /* 上下に余白を与え、左右を自動で配置 */
-    width: 100px; /* 必要に応じて幅を指定 */
-    /* 他のスタイルは元のままで大丈夫 */
+    text-align: center; /* テキストを中央に配置 */
 }
-
