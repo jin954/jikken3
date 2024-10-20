@@ -108,8 +108,8 @@ body {
 
 .file-upload-container button {
     margin-left: 10px; /* ボタンとラベルの間にスペース */
-    padding: 10px 15px; /* 内側の余白を調整 */
-    font-size: 16px; /* 文字サイズを調整 */
+    padding: 5px 10px; /* 内側の余白を調整 */
+    font-size: 10px; /* 文字サイズを調整 */
     border-radius: 5px; /* 角を丸める */
     border: 1px solid #ccc; /* 枠線のスタイルを指定 */
     background-color: #f0f0f0; /* 背景色を指定 */
