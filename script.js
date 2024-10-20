@@ -73,31 +73,41 @@ function resetSettings() {
     resetButton.style.display = "none";
 }
 
-function saveImages() {
-    const uploadInput = document.getElementById("uploadImage");
-    if (uploadInput.files.length > 0) {
-        for (const file of uploadInput.files) {
+// 自動的に画像を保存する関数
+function autoSaveImages() {
+    const input = document.getElementById('uploadImage');
+    const files = input.files;
+
+    if (files.length > 0) {
+        // 画像選択時の処理をここで行う
+        for (const file of files) {
             const reader = new FileReader();
             reader.onload = function (e) {
+                // 画像を配列に追加
                 images.push({ url: e.target.result });
+                // ローカルストレージに保存
                 localStorage.setItem("images", JSON.stringify(images));
-                updateImageList();
+                // 画像リストを更新
+                updateImageList(); // ここでリストを更新する
             };
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file); // 画像ファイルを読み込む
         }
+
+        // ファイル選択後、ファイル入力をクリア
+        input.value = ''; // これでファイル選択の表示をクリア
     }
 }
 
 function updateImageList() {
     const imageList = document.getElementById("imageList");
-    imageList.innerHTML = "";
+    imageList.innerHTML = ""; // 既存のリストをクリア
     images.forEach((image, index) => {
         const imageItem = document.createElement("div");
         imageItem.classList.add("image-item");
         
         const img = document.createElement("img");
         img.src = image.url;
-        img.width = 50;
+        img.width = 50; // サムネイルサイズ
         img.height = 50;
         imageItem.appendChild(img);
 
@@ -120,7 +130,7 @@ function updateImageList() {
         buttonContainer.appendChild(deleteButton);
 
         imageItem.appendChild(buttonContainer);
-        imageList.appendChild(imageItem);
+        imageList.appendChild(imageItem); // 画像項目をリストに追加
     });
 }
 
@@ -150,6 +160,7 @@ function deleteImage(index) {
     updateImageList();
 }
 
+// window.onload で初期化
 window.onload = function () {
     currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
     loadImage(currentIndex);
@@ -163,5 +174,8 @@ window.onload = function () {
         document.getElementById("resetAlarm").style.display = "inline";
     }
 
-    updateImageList();
+    updateImageList(); // 画像リストの初期表示
+
+    // 画像ファイルが選択されたときに自動的に保存する
+    document.getElementById('uploadImage').addEventListener('change', autoSaveImages);
 };
