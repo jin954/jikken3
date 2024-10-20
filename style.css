@@ -87,7 +87,23 @@ body {
     margin-left: 5px;
 }
 
-.modal-content h2 {
-    text-align: center; /* タイトルを中央揃えにする */
-    margin: 20px 0; /* 上下のマージンを追加 */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 350px;
+    text-align: center; /* モーダル内のすべてのコンテンツを中央揃え */
 }
+
+.modal-content h2 {
+    margin: 20px 0;
+}
+
+.modal-content button {
+    display: inline-block;
+    margin-top: 20px; /* 上に余白を追加して少し離す */
+    padding: 10px 20px; /* ボタンのサイズを調整 */
+    cursor: pointer;
+}
+
