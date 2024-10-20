@@ -1,137 +1,134 @@
 let images = JSON.parse(localStorage.getItem("images")) || [];
 let currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
-let displayTime = (localStorage.getItem("displayTime") || 0) * 60 * 1000;
-let selectedMode = localStorage.getItem("selectedMode") || 'timer'; // モードの状態をローカルストレージで管理
 let alarmTime = localStorage.getItem("alarmTime") || '';
-let timer, alarmCheckInterval;
+let alarmCheckInterval;
 
-const defaultImage = "default_image.png";
-
-// ページが読み込まれたときに実行
-window.onload = function() {
+// 初期化関数
+window.onload = function () {
     currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
     loadImage(currentIndex);
 
-    // タイマーの設定を復元
-    const savedDisplayTime = localStorage.getItem("displayTime");
-    if (savedDisplayTime) {
-        displayTime = savedDisplayTime * 60 * 1000;
-        document.getElementById("timerTime").value = formatTime(savedDisplayTime);
-        if (selectedMode === 'timer') {
-            startTimer();
-        }
-    }
-
-    // アラームの設定を復元
+    // 保存されたアラーム時間を設定
     const savedAlarmTime = localStorage.getItem("alarmTime");
     if (savedAlarmTime) {
         alarmTime = savedAlarmTime;
         document.getElementById("alarmTime").value = alarmTime;
-        if (selectedMode === 'alarm') {
-            startAlarmCheck();
-        }
+        document.getElementById("saveAlarm").textContent = "設定済み";
+        document.getElementById("saveAlarm").disabled = true;
+        document.getElementById("resetAlarm").style.display = "inline";
+        startAlarmCheck(); // アラームのチェックを開始
     }
 
-    updateModeButtons(); // モードに応じてボタンの色を更新
     updateImageList();
-};
+}
 
-// 画像をロード
+// 画像の読み込み
 function loadImage(index) {
     const currentImageElement = document.getElementById("currentImage");
     if (images.length > 0) {
         currentImageElement.src = images[index].url;
     } else {
-        currentImageElement.src = defaultImage;
+        currentImageElement.src = "default_image.png"; // デフォルト画像
     }
 }
 
-// タイマー開始
-function startTimer() {
-    clearTimeout(timer);
-    if (displayTime > 0) {
-        timer = setTimeout(nextImage, displayTime);
-    }
+// アラーム設定を保存
+function saveAlarmSettings() {
+    alarmTime = document.getElementById("alarmTime").value;
+    localStorage.setItem("alarmTime", alarmTime);
+    startAlarmCheck(); // アラームのチェックを再開
+
+    document.getElementById("saveAlarm").textContent = "設定済み";
+    document.getElementById("saveAlarm").disabled = true;
+    document.getElementById("resetAlarm").style.display = "inline";
 }
 
-// タイマーリセット
-function resetTimer() {
-    clearTimeout(timer);
-    startTimer();
+// アラームのチェック
+function startAlarmCheck() {
+    clearInterval(alarmCheckInterval); // 以前のチェックをクリア
+    alarmCheckInterval = setInterval(() => {
+        const now = new Date();
+        const currentTime = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+        
+        if (currentTime === alarmTime) {
+            nextImage(); // 次の画像に切り替える
+        }
+    }, 60000); // 1分ごとにチェック
 }
 
-// 次の画像を表示
+// 次の画像に切り替える
 function nextImage() {
     currentIndex = (currentIndex + 1) % (images.length || 1);
     localStorage.setItem("currentIndex", currentIndex);
     loadImage(currentIndex);
-    resetTimer();
 }
 
-// アラームチェックの開始
-function startAlarmCheck() {
-    clearInterval(alarmCheckInterval);
-    alarmCheckInterval = setInterval(() => {
-        const now = new Date();
-        const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-        if (currentTime === alarmTime) {
-            nextImage();
-            clearInterval(alarmCheckInterval); // アラームが発動したらチェックを停止
+// 設定をリセット
+function resetAlarmSettings() {
+    localStorage.removeItem("alarmTime");
+    alarmTime = '';
+    clearTimeout(alarmCheckInterval);
+    document.getElementById("saveAlarm").textContent = "保存";
+    document.getElementById("saveAlarm").disabled = false;
+    document.getElementById("resetAlarm").style.display = "none";
+}
+
+// 画像を保存
+function saveImages() {
+    const uploadInput = document.getElementById("uploadImage");
+    if (uploadInput.files.length > 0) {
+        for (const file of uploadInput.files) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                images.push({ url: e.target.result });
+                localStorage.setItem("images", JSON.stringify(images));
+                updateImageList();
+            };
+            reader.readAsDataURL(file);
         }
-    }, 1000); // 毎秒チェック
-}
-
-// モードの選択
-function selectMode(mode) {
-    selectedMode = mode;
-    localStorage.setItem("selectedMode", selectedMode); // モードを保存
-    updateModeButtons();
-
-    if (mode === 'timer') {
-        document.querySelector('.timer-settings').style.display = 'block';
-        document.querySelector('.alarm-settings').style.display = 'none';
-        clearInterval(alarmCheckInterval); // アラームのチェックを停止
-        startTimer(); // タイマーを開始
-    } else if (mode === 'alarm') {
-        document.querySelector('.timer-settings').style.display = 'none';
-        document.querySelector('.alarm-settings').style.display = 'block';
-        clearTimeout(timer); // タイマーを停止
-        startAlarmCheck(); // アラームのチェックを開始
     }
 }
 
-// ボタンの色を更新
-function updateModeButtons() {
-    const timerButton = document.getElementById("saveTimer");
-    const alarmButton = document.getElementById("saveAlarm");
+// 登録済み画像リストの更新
+function updateImageList() {
+    const imageList = document.getElementById("imageList");
+    imageList.innerHTML = "";
+    images.forEach((image, index) => {
+        const imageItem = document.createElement("div");
+        imageItem.classList.add("image-item");
 
-    if (selectedMode === 'timer') {
-        timerButton.style.backgroundColor = "blue";
-        alarmButton.style.backgroundColor = "gray";
-    } else if (selectedMode === 'alarm') {
-        timerButton.style.backgroundColor = "gray";
-        alarmButton.style.backgroundColor = "blue";
-    }
+        const img = document.createElement("img");
+        img.src = image.url;
+        img.width = 50;
+        img.height = 50;
+        imageItem.appendChild(img);
+
+        const buttonContainer = document.createElement("div");
+        buttonContainer.classList.add("image-item-buttons");
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "削除";
+        deleteButton.onclick = () => deleteImage(index);
+        buttonContainer.appendChild(deleteButton);
+
+        imageItem.appendChild(buttonContainer);
+        imageList.appendChild(imageItem);
+    });
 }
 
-// 設定の保存
-function saveSettings() {
-    if (selectedMode === 'timer') {
-        const timerTime = document.getElementById("timerTime").value;
-        const [hours, minutes] = timerTime.split(":").map(Number);
-        displayTime = (hours * 60 + minutes) * 60 * 1000;
-        localStorage.setItem("displayTime", (hours * 60 + minutes));
-        resetTimer();
-    } else if (selectedMode === 'alarm') {
-        alarmTime = document.getElementById("alarmTime").value;
-        localStorage.setItem("alarmTime", alarmTime);
-        startAlarmCheck();
-    }
+// 画像を削除
+function deleteImage(index) {
+    images.splice(index, 1);
+    localStorage.setItem("images", JSON.stringify(images));
+    updateImageList();
 }
 
-// 時間を00:00形式で表示するための関数
-function formatTime(totalMinutes) {
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+// 設定画面を開く/閉じる
+function openSettings() {
+    document.getElementById("settingsModal").style.display = "block";
+    updateImageList();
+}
+
+function closeSettings() {
+    document.getElementById("settingsModal").style.display = "none";
 }
