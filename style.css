@@ -92,10 +92,3 @@ body {
     margin: 20px 0; /* 上下のマージンを追加 */
 }
 
-.modal-content button {
-    display: block; /* ブロック要素にすることで幅いっぱいに使う */
-    margin: 20px auto; /* 上下に余白を追加し、自動で左右中央に配置 */
-    width: 100px; /* ボタンの幅を指定 */
-    padding: 10px; /* ボタンの内側の余白 */
-    cursor: pointer; /* カーソルをポインターに */
-}
