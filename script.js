@@ -54,12 +54,33 @@ function closeSettings() {
 
 function selectMode(mode) {
     selectedMode = mode;
+    updateModeButtons();
+
     if (mode === 'timer') {
+        // タイマーを有効化し、アラームを無効化
         document.querySelector('.timer-settings').style.display = 'block';
         document.querySelector('.alarm-settings').style.display = 'none';
-    } else {
+        clearTimeout(alarmCheckInterval); // アラームのチェックを停止
+        startTimer(); // タイマーを開始
+    } else if (mode === 'alarm') {
+        // アラームを有効化し、タイマーを無効化
         document.querySelector('.timer-settings').style.display = 'none';
         document.querySelector('.alarm-settings').style.display = 'block';
+        clearTimeout(timer); // タイマーを停止
+        startAlarmCheck(); // アラームのチェックを開始
+    }
+}
+
+function updateModeButtons() {
+    const timerButton = document.getElementById("timerButton");
+    const alarmButton = document.getElementById("alarmButton");
+    
+    if (selectedMode === 'timer') {
+        timerButton.style.backgroundColor = "blue"; // タイマーモードを強調表示
+        alarmButton.style.backgroundColor = "gray"; // アラームモードを非表示
+    } else if (selectedMode === 'alarm') {
+        timerButton.style.backgroundColor = "gray"; // タイマーモードを非表示
+        alarmButton.style.backgroundColor = "blue"; // アラームモードを強調表示
     }
 }
 
@@ -78,7 +99,6 @@ function saveSettings() {
     } else if (selectedMode === 'alarm') {
         alarmTime = document.getElementById("alarmTime").value;
         localStorage.setItem("alarmTime", alarmTime);
-        alert(`毎日 ${alarmTime} に画像が切り替わります`);
         startAlarmCheck();
 
         document.getElementById("saveAlarm").textContent = "設定済み";
@@ -87,30 +107,17 @@ function saveSettings() {
     }
 }
 
-function startAlarmCheck() {
-    clearTimeout(alarmCheckInterval);
-    if (!alarmTime) return;
-
-    alarmCheckInterval = setInterval(() => {
-        const now = new Date();
-        const [alarmHours, alarmMinutes] = alarmTime.split(":").map(Number);
-        if (now.getHours() === alarmHours && now.getMinutes() === alarmMinutes) {
-            nextImage();
-        }
-    }, 60000);
-}
-
 function resetSettings() {
     if (selectedMode === 'timer') {
         localStorage.removeItem("displayTime");
         displayTime = 0;
+        clearTimeout(timer);
     } else if (selectedMode === 'alarm') {
         localStorage.removeItem("alarmTime");
         alarmTime = '';
         clearTimeout(alarmCheckInterval);
     }
 
-    clearTimeout(timer);
     loadImage(currentIndex);
 
     const saveButton = selectedMode === 'timer' ? document.getElementById("saveTimer") : document.getElementById("saveAlarm");
@@ -205,25 +212,32 @@ window.onload = function () {
     const savedDisplayTime = localStorage.getItem("displayTime");
     if (savedDisplayTime) {
         displayTime = savedDisplayTime * 60 * 1000;
-        startTimer();
         document.getElementById("saveTimer").textContent = "設定済み";
         document.getElementById("saveTimer").disabled = true;
         document.getElementById("resetTimer").style.display = "inline";
-        
-        // タイマーの時間入力欄を更新する
+
         const hours = Math.floor(savedDisplayTime / 60);
         const minutes = savedDisplayTime % 60;
         document.getElementById("timerTime").value = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+
+        if (selectedMode === 'timer') {
+            startTimer(); // タイマーが選択されている場合、タイマーを開始
+        }
     }
 
     const savedAlarmTime = localStorage.getItem("alarmTime");
     if (savedAlarmTime) {
         alarmTime = savedAlarmTime;
-        startAlarmCheck();
+        document.getElementById("alarmTime").value = alarmTime;
         document.getElementById("saveAlarm").textContent = "設定済み";
         document.getElementById("saveAlarm").disabled = true;
         document.getElementById("resetAlarm").style.display = "inline";
+
+        if (selectedMode === 'alarm') {
+            startAlarmCheck(); // アラームが選択されている場合、アラームを開始
+        }
     }
 
     updateImageList();
+    updateModeButtons(); // ボタンの色を初期設定に合わせて更新
 };
