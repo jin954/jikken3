@@ -1,120 +1,186 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    text-align: center;
-    margin: 0;
-    padding: 0;
+let images = JSON.parse(localStorage.getItem("images")) || [];
+let currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
+let alarmTime = localStorage.getItem("alarmTime") || '';
+let alarmCheckInterval;
+
+const defaultImage = "default_image.png";
+
+function loadImage(index) {
+    const currentImageElement = document.getElementById("currentImage");
+    if (images.length > 0) {
+        currentImageElement.src = images[index].url;
+    } else {
+        currentImageElement.src = defaultImage;
+    }
 }
 
-.image-container {
-    border: 2px solid black;
-    width: 600px;
-    height: 400px;
-    margin: 20px auto;
-    position: relative;
-    background-color: white;
-    overflow: hidden;
+function nextImage() {
+    currentIndex = (currentIndex + 1) % (images.length || 1);
+    localStorage.setItem("currentIndex", currentIndex);
+    loadImage(currentIndex);
 }
 
-.image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+function prevImage() {
+    currentIndex = (currentIndex - 1 + (images.length || 1)) % (images.length || 1);
+    localStorage.setItem("currentIndex", currentIndex);
+    loadImage(currentIndex);
 }
 
-.control-buttons {
-    text-align: center;
-    margin-top: 40px;
+function openSettings() {
+    document.getElementById("settingsModal").style.display = "block";
+    updateImageList();
 }
 
-.triangle-button {
-    cursor: pointer;
-    font-size: 50px;
-    margin: 0 5px;
-    padding: 5px 10px;
-    width: 45px;
-    height: 45px;
+function closeSettings() {
+    document.getElementById("settingsModal").style.display = "none";
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+function saveSettings() {
+    alarmTime = document.getElementById("alarmTime").value;
+    localStorage.setItem("alarmTime", alarmTime);
+    startAlarmCheck();
+
+    // 保存ボタンの設定変更
+    document.getElementById("saveAlarm").textContent = "設定済み";
+    document.getElementById("saveAlarm").disabled = true;
+
+    // リセットボタンを表示
+    document.getElementById("resetAlarm").style.display = "inline";
+
+    // 時間入力を無効化
+    document.getElementById("alarmTime").disabled = true;
 }
 
-.modal-content {
-    background-color: #fff;
-    margin: 10% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 350px;
-    text-align: left;
+function startAlarmCheck() {
+    clearTimeout(alarmCheckInterval);
+    if (!alarmTime) return;
+
+    alarmCheckInterval = setInterval(() => {
+        const now = new Date();
+        const [alarmHours, alarmMinutes] = alarmTime.split(":").map(Number);
+        if (now.getHours() === alarmHours && now.getMinutes() === alarmMinutes) {
+            nextImage();
+        }
+    }, 60000);
 }
 
-.close-button {
-    float: right;
-    font-size: 24px;
-    cursor: pointer;
+function resetSettings() {
+    localStorage.removeItem("alarmTime");
+    alarmTime = '';
+    clearTimeout(alarmCheckInterval);
+
+    // 保存ボタンを元に戻す
+    document.getElementById("saveAlarm").textContent = "保存";
+    document.getElementById("saveAlarm").disabled = false;
+
+    // リセットボタンを非表示
+    document.getElementById("resetAlarm").style.display = "none";
+
+    // 時間入力を有効化
+    document.getElementById("alarmTime").disabled = false;
+
+    // デフォルトの画像を読み込む
+    loadImage(currentIndex);
 }
 
-.close-button-bottom {
-    display: block; /* ボタンをブロック要素にする */
-    margin: 20px auto; /* 上下の余白を与え、中央に配置 */
-    /* 他のスタイルも必要に応じて追加 */
+// 自動的に画像を保存する関数
+function autoSaveImages() {
+    const input = document.getElementById('uploadImage');
+    const files = input.files;
+
+    if (files.length > 0) {
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                images.push({ url: e.target.result });
+                localStorage.setItem("images", JSON.stringify(images));
+                updateImageList();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        input.value = '';
+    }
 }
 
-.input-time {
-    width: 100px;
+function updateImageList() {
+    const imageList = document.getElementById("imageList");
+    imageList.innerHTML = "";
+    images.forEach((image, index) => {
+        const imageItem = document.createElement("div");
+        imageItem.classList.add("image-item");
+        
+        const img = document.createElement("img");
+        img.src = image.url;
+        img.width = 50;
+        img.height = 50;
+        imageItem.appendChild(img);
+
+        const buttonContainer = document.createElement("div");
+        buttonContainer.classList.add("image-item-buttons");
+
+        const upButton = document.createElement("button");
+        upButton.textContent = "↑";
+        upButton.onclick = () => moveImageUp(index);
+        buttonContainer.appendChild(upButton);
+
+        const downButton = document.createElement("button");
+        downButton.textContent = "↓";
+        downButton.onclick = () => moveImageDown(index);
+        buttonContainer.appendChild(downButton);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "削除";
+        deleteButton.onclick = () => deleteImage(index);
+        buttonContainer.appendChild(deleteButton);
+
+        imageItem.appendChild(buttonContainer);
+        imageList.appendChild(imageItem);
+    });
 }
 
-.alarm-settings {
-    display: flex;
-    justify-content: flex-start; /* 要素を左揃えにする */
-    align-items: center;
-    gap: 10px; /* 各要素の間に10pxのスペースを作る */
+function moveImageUp(index) {
+    if (index > 0) {
+        const temp = images[index];
+        images[index] = images[index - 1];
+        images[index - 1] = temp;
+        localStorage.setItem("images", JSON.stringify(images));
+        updateImageList();
+    }
 }
 
-.image-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+function moveImageDown(index) {
+    if (index < images.length - 1) {
+        const temp = images[index];
+        images[index] = images[index + 1];
+        images[index + 1] = temp;
+        localStorage.setItem("images", JSON.stringify(images));
+        updateImageList();
+    }
 }
 
-.image-item-buttons {
-    display: flex;
+function deleteImage(index) {
+    images.splice(index, 1);
+    localStorage.setItem("images", JSON.stringify(images));
+    updateImageList();
 }
 
-.image-item-buttons button {
-    margin-left: 5px;
-}
+// 初期化処理
+window.onload = function () {
+    currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
+    loadImage(currentIndex);
 
-.modal-content h2 {
-    text-align: center; /* タイトルを中央揃えにする */
-    margin: 20px 0; /* 上下のマージンを追加 */
-}
+    const savedAlarmTime = localStorage.getItem("alarmTime");
+    if (savedAlarmTime) {
+        alarmTime = savedAlarmTime;
+        document.getElementById("alarmTime").value = alarmTime; // アラーム時間を復元
+        startAlarmCheck();
+        document.getElementById("saveAlarm").textContent = "設定済み";
+        document.getElementById("saveAlarm").disabled = true;
+        document.getElementById("resetAlarm").style.display = "inline";
+        document.getElementById("alarmTime").disabled = true; // アラーム設定済みなら入力無効化
+    }
 
-.file-upload-container {
-    display: flex; /* Flexboxを使用 */
-    align-items: center; /* 縦方向の中央揃え */
-    justify-content: flex-start; /* 左寄せ */
-    margin-bottom: 20px; /* 下の余白 */
-}
-
-.file-upload-container button {
-    width: 120px;
-    margin-left: 10px; /* ボタンとラベルの間にスペース */
-    padding: 1px 3px; /* 内側の余白を調整 */
-    font-size: 13px; /* 文字サイズを調整 */
-    border-radius: 3px; /* 角を丸める */
-    border: 1px solid #000; /* 枠線のスタイルを指定 */
-    background-color: #f0f0f0; /* 背景色を指定 */
-    cursor: pointer; /* マウスカーソルをポインターにする */
-}
-
-
+    updateImageList();
+    document.getElementById('uploadImage').addEventListener('change', autoSaveImages);
+};
