@@ -38,12 +38,17 @@ function closeSettings() {
 function saveSettings() {
     alarmTime = document.getElementById("alarmTime").value;
     localStorage.setItem("alarmTime", alarmTime);
-    alert(`毎日 ${alarmTime} に画像が切り替わります`);
     startAlarmCheck();
 
+    // 保存ボタンの設定変更
     document.getElementById("saveAlarm").textContent = "設定済み";
     document.getElementById("saveAlarm").disabled = true;
+
+    // リセットボタンを表示
     document.getElementById("resetAlarm").style.display = "inline";
+
+    // 時間入力を無効化
+    document.getElementById("alarmTime").disabled = true;
 }
 
 function startAlarmCheck() {
@@ -63,14 +68,19 @@ function resetSettings() {
     localStorage.removeItem("alarmTime");
     alarmTime = '';
     clearTimeout(alarmCheckInterval);
+
+    // 保存ボタンを元に戻す
+    document.getElementById("saveAlarm").textContent = "保存";
+    document.getElementById("saveAlarm").disabled = false;
+
+    // リセットボタンを非表示
+    document.getElementById("resetAlarm").style.display = "none";
+
+    // 時間入力を有効化
+    document.getElementById("alarmTime").disabled = false;
+
+    // デフォルトの画像を読み込む
     loadImage(currentIndex);
-
-    const saveButton = document.getElementById("saveAlarm");
-    saveButton.textContent = "保存";
-    saveButton.disabled = false;
-
-    const resetButton = document.getElementById("resetAlarm");
-    resetButton.style.display = "none";
 }
 
 // 自動的に画像を保存する関数
@@ -79,35 +89,30 @@ function autoSaveImages() {
     const files = input.files;
 
     if (files.length > 0) {
-        // 画像選択時の処理をここで行う
         for (const file of files) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                // 画像を配列に追加
                 images.push({ url: e.target.result });
-                // ローカルストレージに保存
                 localStorage.setItem("images", JSON.stringify(images));
-                // 画像リストを更新
-                updateImageList(); // ここでリストを更新する
+                updateImageList();
             };
-            reader.readAsDataURL(file); // 画像ファイルを読み込む
+            reader.readAsDataURL(file);
         }
 
-        // ファイル選択後、ファイル入力をクリア
-        input.value = ''; // これでファイル選択の表示をクリア
+        input.value = '';
     }
 }
 
 function updateImageList() {
     const imageList = document.getElementById("imageList");
-    imageList.innerHTML = ""; // 既存のリストをクリア
+    imageList.innerHTML = "";
     images.forEach((image, index) => {
         const imageItem = document.createElement("div");
         imageItem.classList.add("image-item");
         
         const img = document.createElement("img");
         img.src = image.url;
-        img.width = 50; // サムネイルサイズ
+        img.width = 50;
         img.height = 50;
         imageItem.appendChild(img);
 
@@ -130,7 +135,7 @@ function updateImageList() {
         buttonContainer.appendChild(deleteButton);
 
         imageItem.appendChild(buttonContainer);
-        imageList.appendChild(imageItem); // 画像項目をリストに追加
+        imageList.appendChild(imageItem);
     });
 }
 
@@ -160,7 +165,7 @@ function deleteImage(index) {
     updateImageList();
 }
 
-// window.onload で初期化
+// 初期化処理
 window.onload = function () {
     currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
     loadImage(currentIndex);
@@ -168,14 +173,14 @@ window.onload = function () {
     const savedAlarmTime = localStorage.getItem("alarmTime");
     if (savedAlarmTime) {
         alarmTime = savedAlarmTime;
+        document.getElementById("alarmTime").value = alarmTime; // アラーム時間を復元
         startAlarmCheck();
         document.getElementById("saveAlarm").textContent = "設定済み";
         document.getElementById("saveAlarm").disabled = true;
         document.getElementById("resetAlarm").style.display = "inline";
+        document.getElementById("alarmTime").disabled = true; // アラーム設定済みなら入力無効化
     }
 
-    updateImageList(); // 画像リストの初期表示
-
-    // 画像ファイルが選択されたときに自動的に保存する
+    updateImageList();
     document.getElementById('uploadImage').addEventListener('change', autoSaveImages);
 };
