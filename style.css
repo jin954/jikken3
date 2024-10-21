@@ -117,6 +117,14 @@ body {
     cursor: pointer; /* マウスカーソルをポインターにする */
 }
 
+/* スペースを減らす */
+.file-upload-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 10px; /* 下の余白を減らす */
+}
+
 #imageListContainer {
     max-height: 200px; /* 表示領域の最大高さを指定 */
     overflow-y: auto; /* 垂直方向にスクロールを可能にする */
