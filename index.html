@@ -15,11 +15,10 @@
 
         .file-upload-container button {
             margin-left: 10px; /* ボタンとラベルの間にスペース */
+        }
 
         input[type="time"] {
             scroll-behavior: smooth; /* スクロールを滑らかに */
-        }
-            
         }
     </style>
 </head>
@@ -67,6 +66,42 @@
             <button class="close-button-bottom" onclick="closeSettings()">閉じる</button>
         </div>
     </div>
+
+<script>
+    document.querySelector('input[type="time"]').addEventListener('wheel', function(event) {
+        event.preventDefault(); // デフォルトのスクロール動作を無効化
+
+        const delta = event.deltaY;
+        const input = this;
+
+        // 現在の時間を取得して、新しい時間に更新する
+        let [hours, minutes] = input.value.split(':').map(Number);
+
+        if (delta > 0) {
+            // 下方向スクロール（時間を進める）
+            if (minutes === 59) {
+                minutes = 0;
+                hours = (hours + 1) % 24; // 24時間制を超えないように
+            } else {
+                minutes += 1;
+            }
+        } else {
+            // 上方向スクロール（時間を戻す）
+            if (minutes === 0) {
+                minutes = 59;
+                hours = (hours === 0 ? 23 : hours - 1);
+            } else {
+                minutes -= 1;
+            }
+        }
+
+        // 時刻を2桁にそろえる
+        const formattedHours = String(hours).padStart(2, '0');
+        const formattedMinutes = String(minutes).padStart(2, '0');
+
+        input.value = `${formattedHours}:${formattedMinutes}`;
+    });
+</script>
 
     <script src="script.js"></script>
     <script>
