@@ -131,3 +131,20 @@ body {
     border: 1px solid #ccc; /* 必要なら枠線を追加 */
     padding: 10px; /* 内側の余白を追加 */
 }
+
+/* 余白をリセットして間隔を減らす */
+.file-upload-container {
+    margin-bottom: 10px; /* 余白を10pxに縮小 */
+}
+
+/* 画像リストの余白を減らす */
+#imageListContainer {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 5px; /* 登録画像リストの上の余白を減らす */
+}
+
+/* <h3>要素の余白を調整 */
+h3 {
+    margin: 10px 0; /* タイトルの上下の余白を減らす */
+}
