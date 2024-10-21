@@ -116,3 +116,10 @@ body {
     background-color: #f0f0f0; /* 背景色を指定 */
     cursor: pointer; /* マウスカーソルをポインターにする */
 }
+
+#imageListContainer {
+    max-height: 200px; /* 表示領域の最大高さを指定 */
+    overflow-y: auto; /* 垂直方向にスクロールを可能にする */
+    border: 1px solid #ccc; /* 必要なら枠線を追加 */
+    padding: 10px; /* 内側の余白を追加 */
+}
