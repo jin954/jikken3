@@ -122,7 +122,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-bottom: 5px; /* 下の余白を減らす */
+    margin-bottom: 0px; /* 下の余白を減らす */
 }
 
 #imageListContainer {
