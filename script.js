@@ -184,35 +184,36 @@ window.onload = function () {
     updateImageList();
     document.getElementById('uploadImage').addEventListener('change', autoSaveImages);
 
-    document.querySelector('input[type="time"]').addEventListener('wheel', function(event) {
+document.querySelector('input[type="time"]').addEventListener('wheel', function(event) {
     event.preventDefault(); // デフォルトのスクロール動作を無効化
 
-    const delta = event.deltaY;
+    const delta = Math.sign(event.deltaY); // スクロールの方向を取得（上: -1、下: 1）
     const input = this;
 
     // 現在の時間を取得して、新しい時間に更新する
     let [hours, minutes] = input.value.split(':').map(Number);
 
-    // スクロール速度の調整
-    const increment = (delta > 0) ? 1 : -1;  // スクロール方向に基づいて時間を進めるか戻すか
-
-    // 分を小刻みに増減する
-    minutes += increment;
-
-    // 分が0未満や60以上になった場合、時間も変更
-    if (minutes >= 60) {
-        minutes = 0;
-        hours = (hours + 1) % 24;
-    } else if (minutes < 0) {
-        minutes = 59;
-        hours = (hours === 0 ? 23 : hours - 1);
+    // スクロール方向に基づいて時間を増減
+    if (delta > 0) {
+        // 下方向スクロール（時間を進める）
+        minutes += 1;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours = (hours + 1) % 24; // 24時間を超えないように
+        }
+    } else {
+        // 上方向スクロール（時間を戻す）
+        minutes -= 1;
+        if (minutes < 0) {
+            minutes = 59;
+            hours = (hours === 0 ? 23 : hours - 1);
+        }
     }
 
     // 時刻を2桁にそろえる
     const formattedHours = String(hours).padStart(2, '0');
     const formattedMinutes = String(minutes).padStart(2, '0');
 
+    // 値を即座に更新
     input.value = `${formattedHours}:${formattedMinutes}`;
-　　});
-
-};
+});
