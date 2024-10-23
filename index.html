@@ -3,44 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Alarm Settings</title>
+    <title>画像スライダー</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="image-container">
-        <img id="mainImage" class="image" src="image1.jpg" alt="Main Image">
+        <img id="mainImage" class="image" src="" alt="Main Image">
     </div>
-
     <div class="control-buttons">
-        <button class="triangle-button" id="prevImage">◀</button>
-        <span id="imageDots">●</span>
-        <button class="triangle-button" id="nextImage">▶</button>
+        <button class="triangle-button" id="prevBtn">◀</button>
+        <button class="triangle-button" id="stopBtn">●</button>
+        <button class="triangle-button" id="nextBtn">▶</button>
     </div>
 
-    <button id="openModal">設定</button>
+    <button id="openModalBtn">設定</button>
 
-    <!-- モーダル -->
-    <div id="settingsModal" class="modal">
+    <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close-button" id="closeModal">&times;</span>
+            <span class="close-button" id="closeModalBtn">&times;</span>
             <h2>設定</h2>
             <div class="alarm-settings">
                 <label for="alarmTime">アラーム時間:</label>
                 <input type="time" id="alarmTime" class="input-time">
+                <button id="saveAlarmBtn">保存</button>
             </div>
-            <button id="saveSettings">保存</button>
-
             <h3>登録画像リスト</h3>
             <div id="imageListContainer">
                 <ul id="imageList"></ul>
             </div>
-
             <div class="file-upload-container">
                 <input type="file" id="imageUpload" accept="image/*">
-                <button id="uploadButton">画像をアップロード</button>
+                <button id="uploadImageBtn">画像をアップロード</button>
             </div>
-
-            <button class="close-button-bottom" id="closeModalBottom">閉じる</button>
+            <button id="closeModalBtnBottom" class="close-button-bottom">閉じる</button>
         </div>
     </div>
 
