@@ -29,7 +29,12 @@ function prevImage() {
 function openSettings() {
     document.getElementById("settingsModal").style.display = "block";
     updateImageList();
+    // スクロールを最初から有効にする
+    const imageList = document.getElementById("imageList");
+    imageList.style.maxHeight = "200px"; // 適切な高さに設定
+    imageList.style.overflowY = "auto"; // スクロールを有効にする
 }
+
 
 function closeSettings() {
     document.getElementById("settingsModal").style.display = "none";
@@ -83,7 +88,6 @@ function resetSettings() {
     loadImage(currentIndex);
 }
 
-// 自動的に画像を保存する関数
 function autoSaveImages() {
     const input = document.getElementById('uploadImage');
     const files = input.files;
@@ -92,27 +96,33 @@ function autoSaveImages() {
         for (const file of files) {
             const reader = new FileReader();
             reader.onload = function (e) {
+                // 画像をimages配列に追加
                 images.push({ url: e.target.result });
+                // images配列をlocalStorageに保存
                 localStorage.setItem("images", JSON.stringify(images));
+                // 画像リストを更新してスクロールもリセット
                 updateImageList();
             };
             reader.readAsDataURL(file);
         }
 
+        // ファイル選択後にinputをクリア
         input.value = '';
     }
 }
 
+
 function updateImageList() {
-    const imageList = document.getElementById("imageList");
-    imageList.innerHTML = "";
+    const imageList = document.getElementById('imageList');
+    imageList.innerHTML = ""; // 既存のリストをクリア
+
     images.forEach((image, index) => {
         const imageItem = document.createElement("div");
         imageItem.classList.add("image-item");
-        
+
         const img = document.createElement("img");
         img.src = image.url;
-        img.width = 50;
+        img.width = 50; // サムネイルサイズ
         img.height = 50;
         imageItem.appendChild(img);
 
@@ -135,8 +145,11 @@ function updateImageList() {
         buttonContainer.appendChild(deleteButton);
 
         imageItem.appendChild(buttonContainer);
-        imageList.appendChild(imageItem);
+        imageList.appendChild(imageItem); // 画像項目をリストに追加
     });
+
+    // スクロール位置をリセット
+    imageList.scrollTop = imageList.scrollHeight;
 }
 
 function moveImageUp(index) {
