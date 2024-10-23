@@ -75,17 +75,29 @@ function autoSaveImages() {
     const files = input.files;
 
     if (files.length > 0) {
+        let fileCount = files.length;
+        let loadedCount = 0;
+
         for (const file of files) {
             const reader = new FileReader();
             reader.onload = function (event) {
                 const imageUrl = event.target.result;
                 registerImage(imageUrl);
+
+                // 画像の読み込みが完了するたびにカウントを増やす
+                loadedCount++;
+
+                // すべての画像が読み込み終わったらリストを更新
+                if (loadedCount === fileCount) {
+                    updateImageList();
+                }
             };
             reader.readAsDataURL(file);
         }
         input.value = ''; // ファイル選択後にファイル入力をクリア
     }
 }
+
 
 function registerImage(imageUrl) {
     images.push({ url: imageUrl });
