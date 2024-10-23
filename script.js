@@ -29,9 +29,6 @@ function prevImage() {
 function openSettings() {
     document.getElementById("settingsModal").style.display = "block";
     updateImageList();
-    const imageList = document.getElementById("imageList");
-    imageList.style.maxHeight = "200px";
-    imageList.style.overflowY = "auto";
 }
 
 function closeSettings() {
@@ -49,7 +46,7 @@ function saveSettings() {
 }
 
 function startAlarmCheck() {
-    clearTimeout(alarmCheckInterval);
+    clearInterval(alarmCheckInterval);
     if (!alarmTime) return;
     alarmCheckInterval = setInterval(() => {
         const now = new Date();
@@ -63,7 +60,7 @@ function startAlarmCheck() {
 function resetSettings() {
     localStorage.removeItem("alarmTime");
     alarmTime = '';
-    clearTimeout(alarmCheckInterval);
+    clearInterval(alarmCheckInterval);
     document.getElementById("saveAlarm").textContent = "保存";
     document.getElementById("saveAlarm").disabled = false;
     document.getElementById("resetAlarm").style.display = "none";
@@ -94,25 +91,29 @@ function updateImageList() {
     images.forEach((image, index) => {
         const imageItem = document.createElement("div");
         imageItem.classList.add("image-item");
+
         const img = document.createElement("img");
         img.src = image.url;
-        img.width = 50;
-        img.height = 50;
         imageItem.appendChild(img);
+
         const buttonContainer = document.createElement("div");
         buttonContainer.classList.add("image-item-buttons");
+
         const upButton = document.createElement("button");
         upButton.textContent = "↑";
         upButton.onclick = () => moveImageUp(index);
         buttonContainer.appendChild(upButton);
+
         const downButton = document.createElement("button");
         downButton.textContent = "↓";
         downButton.onclick = () => moveImageDown(index);
         buttonContainer.appendChild(downButton);
+
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "削除";
         deleteButton.onclick = () => deleteImage(index);
         buttonContainer.appendChild(deleteButton);
+
         imageItem.appendChild(buttonContainer);
         imageList.appendChild(imageItem);
     });
@@ -152,4 +153,5 @@ window.onload = function() {
         document.getElementById("alarmTime").value = savedAlarmTime;
         saveSettings();
     }
+    document.getElementById("uploadImage").addEventListener("change", autoSaveImages);
 };
