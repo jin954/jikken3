@@ -63,9 +63,8 @@ body {
 }
 
 .close-button-bottom {
-    display: block; /* ボタンをブロック要素にする */
-    margin: 20px auto; /* 上下の余白を与え、中央に配置 */
-    /* 他のスタイルも必要に応じて追加 */
+    display: block;
+    margin: 20px auto;
 }
 
 .input-time {
@@ -74,9 +73,9 @@ body {
 
 .alarm-settings {
     display: flex;
-    justify-content: flex-start; /* 要素を左揃えにする */
+    justify-content: flex-start;
     align-items: center;
-    gap: 10px; /* 各要素の間に10pxのスペースを作る */
+    gap: 10px;
 }
 
 .image-item {
@@ -95,61 +94,40 @@ body {
 }
 
 .modal-content h2 {
-    text-align: center; /* タイトルを中央揃えにする */
-    margin: 20px 0; /* 上下のマージンを追加 */
+    text-align: center;
+    margin: 20px 0;
 }
 
-.file-upload-container {
-    display: flex; /* Flexboxを使用 */
-    align-items: center; /* 縦方向の中央揃え */
-    justify-content: flex-start; /* 左寄せ */
-    margin-bottom: 20px; /* 下の余白 */
-}
-
-.file-upload-container button {
-    width: 120px;
-    margin-left: 10px; /* ボタンとラベルの間にスペース */
-    padding: 1px 3px; /* 内側の余白を調整 */
-    font-size: 13px; /* 文字サイズを調整 */
-    border-radius: 3px; /* 角を丸める */
-    border: 1px solid #000; /* 枠線のスタイルを指定 */
-    background-color: #f0f0f0; /* 背景色を指定 */
-    cursor: pointer; /* マウスカーソルをポインターにする */
-}
-
-/* スペースを減らす */
 .file-upload-container {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-bottom: 0px; /* 下の余白を減らす */
+    margin-bottom: 20px;
+}
+
+.file-upload-container button {
+    width: 120px;
+    margin-left: 10px;
+    padding: 1px 3px;
+    font-size: 13px;
+    border-radius: 3px;
+    border: 1px solid #000;
+    background-color: #f0f0f0;
+    cursor: pointer;
 }
 
 #imageListContainer {
-    max-height: 200px; /* 表示領域の最大高さを指定 */
-    overflow-y: auto; /* 垂直方向にスクロールを可能にする */
-    border: 1px solid #ccc; /* 必要なら枠線を追加 */
-    padding: 10px; /* 内側の余白を追加 */
-}
-
-/* 余白をリセットして間隔を減らす */
-.file-upload-container {
-    margin-bottom: 10px; /* 余白を10pxに縮小 */
-}
-
-/* 画像リストの余白を減らす */
-#imageListContainer {
-    max-height: 220px;
+    max-height: 200px;
     overflow-y: auto;
-    margin-top: 5px; /* 登録画像リストの上の余白を減らす */
+    border: 1px solid #ccc;
+    padding: 10px;
 }
 
 #imageList {
-    overflow: hidden;  /* 子要素はスクロールさせない */
-    display: block;    /* 子要素が縦に並ぶようにする */
+    overflow: hidden;
+    display: block;
 }
 
-/* <h3>要素の余白を調整 */
 h3 {
-    margin: 10px 0; /* タイトルの上下の余白を減らす */
+    margin: 10px 0;
 }
