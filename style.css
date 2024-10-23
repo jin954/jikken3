@@ -2,38 +2,32 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     text-align: center;
-    margin: 0;
-    padding: 0;
 }
 
 .image-container {
     border: 2px solid black;
-    width: 700px;
+    width: 500px;
     height: 500px;
     margin: 20px auto;
-    position: relative;
     background-color: white;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .image {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain;
 }
 
 .control-buttons {
-    text-align: center;
-    margin-top: 25px;
+    margin-top: 10px;
 }
 
 .triangle-button {
     cursor: pointer;
-    font-size: 50px;
-    margin: 0 5px;
-    padding: 5px 10px;
-    width: 30px;
-    height: 30px;
+    font-size: 30px;
+    margin: 0 10px;
 }
 
 .modal {
@@ -49,10 +43,10 @@ body {
 
 .modal-content {
     background-color: #fff;
-    margin: 10% auto;
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 350px;
+    width: 300px;
     text-align: left;
 }
 
@@ -67,53 +61,12 @@ body {
     margin: 20px auto;
 }
 
-.input-time {
-    width: 100px;
-}
-
 .alarm-settings {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 10px;
-}
-
-.image-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 10px;
 }
 
-.image-item-buttons {
-    display: flex;
-}
-
-.image-item-buttons button {
-    margin-left: 5px;
-}
-
-.modal-content h2 {
-    text-align: center;
-    margin: 20px 0;
-}
-
 .file-upload-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 20px;
-}
-
-.file-upload-container button {
-    width: 120px;
-    margin-left: 10px;
-    padding: 1px 3px;
-    font-size: 13px;
-    border-radius: 3px;
-    border: 1px solid #000;
-    background-color: #f0f0f0;
-    cursor: pointer;
+    margin-top: 10px;
 }
 
 #imageListContainer {
@@ -124,10 +77,18 @@ body {
 }
 
 #imageList {
-    overflow: hidden;
-    display: block;
+    list-style-type: none;
+    padding: 0;
 }
 
-h3 {
-    margin: 10px 0;
+.image-item {
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.image-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
 }
