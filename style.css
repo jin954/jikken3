@@ -102,7 +102,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .file-upload-container button {
@@ -117,7 +117,7 @@ body {
 }
 
 #imageListContainer {
-    max-height: 200px;
+    max-height: 220px;
     overflow-y: auto;
     border: 1px solid #ccc;
     padding: 10px;
