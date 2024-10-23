@@ -3,43 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Slider with Alarm</title>
+    <title>画像スライダーウィジェット</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .file-upload-container {
+            display: flex; /* Flexboxを使用 */
+            align-items: center; /* 縦方向の中央揃え */
+            justify-content: flex-start; /* 左寄せ */
+            margin-bottom: 20px; /* 下の余白 */
+        }
+
+        .file-upload-container button {
+            margin-left: 10px; /* ボタンとラベルの間にスペース */
+        }
+
+        input[type="time"] {
+            scroll-behavior: smooth; /* スクロールを滑らかに */
+        }
+
+ #imageList {
+            max-height: 200px; /* 高さを適切に設定 */
+            overflow-y: auto; /* スクロールを有効にする */
+        }
+    </style>
 </head>
 <body>
-    <div class="image-container">
-        <img id="currentImage" class="image" src="default_image.png" alt="current image">
+    <div class="image-container" id="imageContainer">
+        <img src="default_image.png" id="currentImage" class="image" alt="画像表示エリア">
     </div>
-    
     <div class="control-buttons">
-        <button class="triangle-button" onclick="prevImage()">◀</button>
-        <button class="triangle-button" onclick="nextImage()">▶</button>
+        <span class="triangle-button" onclick="prevImage()">&#9664;</span>
+        <span class="triangle-button" onclick="openSettings()">&#9679;</span>
+        <span class="triangle-button" onclick="nextImage()">&#9654;</span>
     </div>
 
     <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <span class="close-button" onclick="closeSettings()">×</span>
+            <span class="close-button" onclick="closeSettings()">&times;</span>
             <h2>設定</h2>
+
+            <!-- アラーム設定 -->
             <div class="alarm-settings">
-                <label for="alarmTime">アラーム時間:</label>
-                <input type="time" id="alarmTime" class="input-time">
+                <label>時間 : </label>
+                <input type="time" id="alarmTime" class="input-time" value="00:00">
+                <button id="saveAlarm" onclick="saveSettings()">保存</button>
+                <button id="resetAlarm" style="display:none;" onclick="resetSettings()">リセット</button>
             </div>
-            <button id="saveAlarm" onclick="saveSettings()">保存</button>
-            <button id="resetAlarm" onclick="resetSettings()" style="display: none;">リセット</button>
+
+            <br>
+
+            <!-- 画像アップロードセクション -->
+            <div class="file-upload-container">
+                <label for="uploadImage">画像 :</label>
+                <input type="file" id="uploadImage" accept="image/*" multiple style="display:none;" onchange="autoSaveImages()">
+                <button type="button" onclick="document.getElementById('uploadImage').click()">ファイルを選択</button>
+            </div>
+
+            <br>
+
+            <!-- 登録済み画像リスト -->
+            <h3>登録済み画像</h3>
             <div id="imageListContainer">
-                <h3>登録画像リスト</h3>
                 <div id="imageList"></div>
             </div>
-            <div class="file-upload-container">
-                <input type="file" id="uploadImage" accept="image/*" style="display:none;">
-                <button onclick="document.getElementById('uploadImage').click()">画像をアップロード</button>
-            </div>
+
+            <br>
             <button class="close-button-bottom" onclick="closeSettings()">閉じる</button>
         </div>
     </div>
 
-    <button onclick="openSettings()">設定を開く</button>
+<script>
+    document.querySelector('input[type="time"]').addEventListener('wheel', function(event) {
+        event.preventDefault(); // デフォルトのスクロール動作を無効化
+
+        const delta = event.deltaY;
+        const input = this;
+
+        // 現在の時間を取得して、新しい時間に更新する
+        let [hours, minutes] = input.value.split(':').map(Number);
+
+        if (delta > 0) {
+            // 下方向スクロール（時間を進める）
+            if (minutes === 59) {
+                minutes = 0;
+                hours = (hours + 1) % 24; // 24時間制を超えないように
+            } else {
+                minutes += 1;
+            }
+        } else {
+            // 上方向スクロール（時間を戻す）
+            if (minutes === 0) {
+                minutes = 59;
+                hours = (hours === 0 ? 23 : hours - 1);
+            } else {
+                minutes -= 1;
+            }
+        }
+
+        // 時刻を2桁にそろえる
+        const formattedHours = String(hours).padStart(2, '0');
+        const formattedMinutes = String(minutes).padStart(2, '0');
+
+        input.value = `${formattedHours}:${formattedMinutes}`;
+    });
+</script>
 
     <script src="script.js"></script>
+    <script>
+        let images = JSON.parse(localStorage.getItem("images")) || [];
+
+        function autoSaveImages() {
+            const input = document.getElementById('uploadImage');
+            const files = input.files;
+
+            if (files.length > 0) {
+                for (const file of files) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imageUrl = event.target.result;
+                        registerImage(imageUrl);
+                    };
+                    reader.readAsDataURL(file);
+                }
+                // ファイル選択後にファイル入力をクリア
+                input.value = '';
+            }
+        }
+
+        function registerImage(imageUrl) {
+            images.push({ url: imageUrl });
+            localStorage.setItem("images", JSON.stringify(images));
+            updateImageList();
+        }
+
+        function updateImageList() {
+            const imageList = document.getElementById('imageList');
+            imageList.innerHTML = ""; // 既存のリストをクリア
+            images.forEach((image, index) => {
+                const imageItem = document.createElement("div");
+                imageItem.classList.add("image-item");
+                
+                const img = document.createElement("img");
+                img.src = image.url;
+                img.width = 50; // サムネイルサイズ
+                img.height = 50;
+                imageItem.appendChild(img);
+
+                const buttonContainer = document.createElement("div");
+                buttonContainer.classList.add("image-item-buttons");
+
+                const upButton = document.createElement("button");
+                upButton.textContent = "↑";
+                upButton.onclick = () => moveImageUp(index);
+                buttonContainer.appendChild(upButton);
+
+                const downButton = document.createElement("button");
+                downButton.textContent = "↓";
+                downButton.onclick = () => moveImageDown(index);
+                buttonContainer.appendChild(downButton);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "削除";
+                deleteButton.onclick = () => deleteImage(index);
+                buttonContainer.appendChild(deleteButton);
+
+                imageItem.appendChild(buttonContainer);
+                imageList.appendChild(imageItem); // 画像項目をリストに追加
+            });
+        }
+
+        function moveImageUp(index) {
+            if (index > 0) {
+                const temp = images[index];
+                images[index] = images[index - 1];
+                images[index - 1] = temp;
+                localStorage.setItem("images", JSON.stringify(images));
+                updateImageList();
+            }
+        }
+
+        function moveImageDown(index) {
+            if (index < images.length - 1) {
+                const temp = images[index];
+                images[index] = images[index + 1];
+                images[index + 1] = temp;
+                localStorage.setItem("images", JSON.stringify(images));
+                updateImageList();
+            }
+        }
+
+        function deleteImage(index) {
+            images.splice(index, 1);
+            localStorage.setItem("images", JSON.stringify(images));
+            updateImageList();
+        }
+
+        // 初期化処理
+        window.onload = function () {
+            updateImageList(); // 画像リストの初期表示
+        };
+    </script>
 </body>
 </html>
