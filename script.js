@@ -3,7 +3,7 @@ let currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
 let alarmTime = localStorage.getItem("alarmTime") || '';
 let alarmCheckInterval;
 
-const defaultImage = "default_image.png";
+const defaultImage = "default_image.png"; // 初期画像のパス
 
 function loadImage(index) {
     const currentImageElement = document.getElementById("currentImage");
@@ -47,7 +47,7 @@ function saveSettings() {
 }
 
 function startAlarmCheck() {
-    clearTimeout(alarmCheckInterval);
+    clearInterval(alarmCheckInterval);
     if (!alarmTime) return;
 
     alarmCheckInterval = setInterval(() => {
@@ -56,13 +56,13 @@ function startAlarmCheck() {
         if (now.getHours() === alarmHours && now.getMinutes() === alarmMinutes) {
             nextImage();
         }
-    }, 60000);
+    }, 60000); // 1分ごとにチェック
 }
 
 function resetSettings() {
     localStorage.removeItem("alarmTime");
     alarmTime = '';
-    clearTimeout(alarmCheckInterval);
+    clearInterval(alarmCheckInterval);
 
     document.getElementById("saveAlarm").textContent = "保存";
     document.getElementById("saveAlarm").disabled = false;
@@ -83,8 +83,6 @@ function autoSaveImages() {
             reader.onload = function (event) {
                 const imageUrl = event.target.result;
                 registerImage(imageUrl);
-
-                // 画像の読み込みが完了するたびにカウントを増やす
                 loadedCount++;
 
                 // すべての画像が読み込み終わったらリストを更新
@@ -97,7 +95,6 @@ function autoSaveImages() {
         input.value = ''; // ファイル選択後にファイル入力をクリア
     }
 }
-
 
 function registerImage(imageUrl) {
     images.push({ url: imageUrl });
