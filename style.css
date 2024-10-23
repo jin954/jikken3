@@ -123,6 +123,11 @@ body {
     padding: 10px;
 }
 
+#imageList {
+    overflow: hidden;
+    display: block;
+}
+
 h3 {
     margin: 10px 0;
 }
