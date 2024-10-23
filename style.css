@@ -1,26 +1,39 @@
-.image-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
     text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.image-container {
+    border: 2px solid black;
+    width: 700px;
+    height: 500px;
+    margin: 20px auto;
+    position: relative;
+    background-color: white;
+    overflow: hidden;
 }
 
 .image {
-    width: 100%;
     max-width: 100%;
-    height: auto;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 .control-buttons {
-    display: flex;
-    justify-content: space-between;
-    max-width: 400px;
-    margin: 20px auto;
+    text-align: center;
+    margin-top: 25px;
 }
 
 .triangle-button {
-    font-size: 2rem;
     cursor: pointer;
+    font-size: 50px;
+    margin: 0 5px;
+    padding: 5px 10px;
+    width: 30px;
+    height: 30px;
 }
 
 .modal {
@@ -32,30 +45,37 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    padding-top: 60px;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
+    background-color: #fff;
+    margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
+    width: 350px;
+    text-align: left;
 }
 
 .close-button {
-    color: #aaa;
     float: right;
-    font-size: 28px;
-    font-weight: bold;
+    font-size: 24px;
+    cursor: pointer;
 }
 
-.close-button:hover,
-.close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.close-button-bottom {
+    display: block;
+    margin: 20px auto;
+}
+
+.input-time {
+    width: 100px;
+}
+
+.alarm-settings {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
 }
 
 .image-item {
@@ -65,26 +85,44 @@
     margin-bottom: 10px;
 }
 
+.image-item-buttons {
+    display: flex;
+}
+
 .image-item-buttons button {
     margin-left: 5px;
 }
 
-.input-time {
-    width: 100px;
+.modal-content h2 {
+    text-align: center;
+    margin: 20px 0;
 }
 
 .file-upload-container {
-    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 20px;
 }
 
-.close-button-bottom {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px;
+.file-upload-container button {
+    width: 120px;
+    margin-left: 10px;
+    padding: 1px 3px;
+    font-size: 13px;
+    border-radius: 3px;
+    border: 1px solid #000;
+    background-color: #f0f0f0;
     cursor: pointer;
 }
 
-.close-button-bottom:hover {
-    background-color: #45a049;
+#imageListContainer {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+h3 {
+    margin: 10px 0;
 }
