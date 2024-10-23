@@ -3,39 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>画像スライダー</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>画像スライダーウィジェット</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="image-container">
-        <img id="mainImage" class="image" src="" alt="Main Image">
+    <div class="image-container" id="imageContainer">
+        <img src="default_image.png" id="currentImage" class="image" alt="画像表示エリア">
     </div>
     <div class="control-buttons">
-        <button class="triangle-button" id="prevBtn">◀</button>
-        <button class="triangle-button" id="stopBtn">●</button>
-        <button class="triangle-button" id="nextBtn">▶</button>
+        <span class="triangle-button" onclick="prevImage()">&#9664;</span>
+        <span class="triangle-button" onclick="openSettings()">&#9679;</span>
+        <span class="triangle-button" onclick="nextImage()">&#9654;</span>
     </div>
 
-    <button id="openModalBtn">設定</button>
-
-    <div id="modal" class="modal">
+    <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <span class="close-button" id="closeModalBtn">&times;</span>
+            <span class="close-button" onclick="closeSettings()">&times;</span>
             <h2>設定</h2>
+
+            <!-- アラーム設定 -->
             <div class="alarm-settings">
-                <label for="alarmTime">アラーム時間:</label>
-                <input type="time" id="alarmTime" class="input-time">
-                <button id="saveAlarmBtn">保存</button>
+                <label>時間 :</label>
+                <input type="time" id="alarmTime" class="input-time" value="00:00">
+                <button id="saveAlarm" onclick="saveSettings()">保存</button>
+                <button id="resetAlarm" style="display:none;" onclick="resetSettings()">リセット</button>
             </div>
-            <h3>登録画像リスト</h3>
-            <div id="imageListContainer">
-                <ul id="imageList"></ul>
-            </div>
+
+            <br>
+
+            <!-- 画像アップロードセクション -->
             <div class="file-upload-container">
-                <input type="file" id="imageUpload" accept="image/*">
-                <button id="uploadImageBtn">画像をアップロード</button>
+                <label for="uploadImage">画像 :</label>
+                <input type="file" id="uploadImage" accept="image/*" multiple style="display:none;" onchange="autoSaveImages()">
+                <button type="button" onclick="document.getElementById('uploadImage').click()">ファイルを選択</button>
             </div>
-            <button id="closeModalBtnBottom" class="close-button-bottom">閉じる</button>
+
+            <br>
+
+            <!-- 登録済み画像リスト -->
+            <h3>登録済み画像</h3>
+            <div id="imageListContainer">
+                <div id="imageList"></div>
+            </div>
+
+            <br>
+            <button class="close-button-bottom" onclick="closeSettings()">閉じる</button>
         </div>
     </div>
 
