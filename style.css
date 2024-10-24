@@ -24,17 +24,24 @@ body {
 
 .control-buttons {
     text-align: center;
-    margin-top: 25px;
+    margin-top: 15px;
 }
+
+.circle-button {
+    cursor: pointer;
+    font-size: 80px; /* ボタン内のアイコンサイズ */
+    margin: 0 5px;
+    padding: 5px 10px;
+ }
+
 
 .triangle-button {
     cursor: pointer;
     font-size: 50px;
     margin: 0 5px;
     padding: 5px 10px;
-    width: 30px;
-    height: 30px;
 }
+
 
 .modal {
     display: none;
