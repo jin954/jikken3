@@ -30,20 +30,15 @@ body {
     gap: 50px; /* ボタン間のスペースを調整 */
 }
 
-.triangle-button, .square-button {
+.triangle-button, .diamond-button {
     cursor: pointer;
-    font-size: 50px;
+    font-size: 50px; /* ボタンのサイズを統一 */
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 60px;
     height: 60px; /* クリック可能範囲をアイコンと同じサイズに調整 */
-}
-
-/* square-buttonに変更し、font-sizeを統一 */
-.square-button {
-    font-size: 50px; /* ■アイコンのサイズをtriangle-buttonと統一 */
 }
 
 
