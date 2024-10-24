@@ -27,19 +27,24 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 15px;
-    gap: 20px; /* ボタン間のスペースを追加 */
+    gap: 50px; /* ボタン間のスペースを調整 */
 }
 
 .triangle-button, .circle-button {
     cursor: pointer;
-    font-size: 50px; /* ボタンのフォントサイズは元のまま */
-    padding: 10px;
+    font-size: 50px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px; /* クリック可能範囲をアイコンと同じサイズに調整 */
 }
 
 .circle-button {
-    font-size: 80px; /* 「●」アイコンのサイズを調整 */
-    display: inline-block;
+    font-size: 50px; /* ●アイコンのサイズを調整 */
 }
+
 
 .modal {
     display: none;
