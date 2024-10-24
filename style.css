@@ -27,45 +27,19 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 15px;
-    gap: 30px; /* ボタン間のスペースを追加 */
+    gap: 20px; /* ボタン間のスペースを追加 */
 }
 
-.triangle-button-container, .circle-button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80px; /* すべてのボタンが同じサイズになるように設定 */
-    height: 80px;
-    position: relative;
+.triangle-button, .circle-button {
+    cursor: pointer;
+    font-size: 50px; /* ボタンのフォントサイズは元のまま */
+    padding: 10px;
 }
 
 .circle-button {
-    cursor: pointer;
-    font-size: 50px; /* 「●」アイコンのサイズを調整 */
-    line-height: 80px;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid black; /* 視覚的な区切りを追加（任意） */
-    background-color: white; /* 背景色（任意） */
+    font-size: 80px; /* 「●」アイコンのサイズを調整 */
+    display: inline-block;
 }
-
-.triangle-button {
-    cursor: pointer;
-    font-size: 50px;
-    line-height: 80px;
-    width: 80px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white; /* 背景色（任意） */
-    border: 2px solid black; /* 視覚的な区切りを追加（任意） */
-}
-
 
 .modal {
     display: none;
