@@ -104,37 +104,40 @@ function registerImage(imageUrl) {
 
 function updateImageList() {
     const imageList = document.getElementById('imageList');
-    imageList.innerHTML = ""; // 既存のリストをクリア
+
+    // 既に表示されているリストを維持し、差分だけを更新する
     images.forEach((image, index) => {
-        const imageItem = document.createElement("div");
-        imageItem.classList.add("image-item");
+        if (!imageList.children[index]) {
+            const imageItem = document.createElement("div");
+            imageItem.classList.add("image-item");
 
-        const img = document.createElement("img");
-        img.src = image.url;
-        img.width = 50; // サムネイルサイズ
-        img.height = 50;
-        imageItem.appendChild(img);
+            const img = document.createElement("img");
+            img.src = image.url;
+            img.width = 50; // サムネイルサイズ
+            img.height = 50;
+            imageItem.appendChild(img);
 
-        const buttonContainer = document.createElement("div");
-        buttonContainer.classList.add("image-item-buttons");
+            const buttonContainer = document.createElement("div");
+            buttonContainer.classList.add("image-item-buttons");
 
-        const upButton = document.createElement("button");
-        upButton.textContent = "↑";
-        upButton.onclick = () => moveImageUp(index);
-        buttonContainer.appendChild(upButton);
+            const upButton = document.createElement("button");
+            upButton.textContent = "↑";
+            upButton.onclick = () => moveImageUp(index);
+            buttonContainer.appendChild(upButton);
 
-        const downButton = document.createElement("button");
-        downButton.textContent = "↓";
-        downButton.onclick = () => moveImageDown(index);
-        buttonContainer.appendChild(downButton);
+            const downButton = document.createElement("button");
+            downButton.textContent = "↓";
+            downButton.onclick = () => moveImageDown(index);
+            buttonContainer.appendChild(downButton);
 
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "削除";
-        deleteButton.onclick = () => deleteImage(index);
-        buttonContainer.appendChild(deleteButton);
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "削除";
+            deleteButton.onclick = () => deleteImage(index);
+            buttonContainer.appendChild(deleteButton);
 
-        imageItem.appendChild(buttonContainer);
-        imageList.appendChild(imageItem); // 画像項目をリストに追加
+            imageItem.appendChild(buttonContainer);
+            imageList.appendChild(imageItem); // 画像項目をリストに追加
+        }
     });
 }
 
@@ -165,38 +168,21 @@ function deleteImage(index) {
 }
 
 // 時間入力に対するホイール操作を制御
-document.querySelector('input[type="time"]').addEventListener('wheel', function(event) {
-    event.preventDefault(); // デフォルトのスクロール動作を無効化
-
+const timeInput = document.getElementById("alarmTime");
+timeInput.addEventListener('wheel', function(event) {
+    event.preventDefault();
     const delta = event.deltaY;
-    const input = this;
-
-    // 現在の時間を取得して、新しい時間に更新する
-    let [hours, minutes] = input.value.split(':').map(Number);
+    let [hours, minutes] = timeInput.value.split(':').map(Number);
 
     if (delta > 0) {
-        // 下方向スクロール（時間を進める）
-        if (minutes === 59) {
-            minutes = 0;
-            hours = (hours + 1) % 24; // 24時間制を超えないように
-        } else {
-            minutes += 1;
-        }
+        minutes = (minutes + 1) % 60;
+        hours = minutes === 0 ? (hours + 1) % 24 : hours;
     } else {
-        // 上方向スクロール（時間を戻す）
-        if (minutes === 0) {
-            minutes = 59;
-            hours = (hours === 0 ? 23 : hours - 1);
-        } else {
-            minutes -= 1;
-        }
+        minutes = (minutes === 0) ? 59 : minutes - 1;
+        hours = (minutes === 59) ? (hours === 0 ? 23 : hours - 1) : hours;
     }
 
-    // 時刻を2桁にそろえる
-    const formattedHours = String(hours).padStart(2, '0');
-    const formattedMinutes = String(minutes).padStart(2, '0');
-
-    input.value = `${formattedHours}:${formattedMinutes}`;
+    timeInput.value = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 });
 
 // 初期化処理
