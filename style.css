@@ -37,8 +37,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 70px;
-    height: 70px; /* クリック可能範囲をアイコンと同じサイズに調整 */
+    width: 60px;
+    height: 60px; /* クリック可能範囲をアイコンと同じサイズに調整 */
 }
 
 .circle-button {
