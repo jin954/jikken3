@@ -30,7 +30,7 @@ body {
     gap: 50px; /* ボタン間のスペースを調整 */
 }
 
-.triangle-button, .circle-button {
+.triangle-button, .square-button {
     cursor: pointer;
     font-size: 50px;
     padding: 0;
@@ -41,9 +41,11 @@ body {
     height: 60px; /* クリック可能範囲をアイコンと同じサイズに調整 */
 }
 
-.circle-button {
-    font-size: 80px; /* ●アイコンのサイズを調整 */
+/* square-buttonに変更し、font-sizeを統一 */
+.square-button {
+    font-size: 50px; /* ■アイコンのサイズをtriangle-buttonと統一 */
 }
+
 
 
 .modal {
