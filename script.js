@@ -71,41 +71,37 @@ function resetSettings() {
     document.getElementById("alarmTime").disabled = false;
 }
 
-function autoSaveImages() {
+async function autoSaveImages() {
     const input = document.getElementById('uploadImage');
     const files = input.files;
 
     if (files.length > 0) {
-        let fileCount = files.length;
-        let loadedCount = 0;
-
-        // 画像の追加制限（例：100個まで登録可能）
         const maxImageCount = 100;
         if (images.length + files.length > maxImageCount) {
-            console.warn(`画像は最大${maxImageCount}枚まで登録できます。`); // アラートを表示しない
+            console.warn(`画像は最大${maxImageCount}枚まで登録できます。`);
             input.value = ''; // ファイル選択後にクリア
             return;
         }
 
         for (const file of files) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const imageUrl = event.target.result;
-                registerImage(imageUrl);
-                loadedCount++;
-
-                // 部分更新：各画像が読み込まれた後に個別に更新
-                updateImageListPartial(images.length - 1);
-
-                // すべての画像が読み込み終わったら、フル更新を行う
-                if (loadedCount === fileCount) {
-                    updateImageList();
-                }
-            };
-            reader.readAsDataURL(file);
+            await readFileAndRegister(file);
+            updateImageList(); // 各画像登録後にリストを更新
         }
+
         input.value = ''; // ファイル選択後にクリア
     }
+}
+
+function readFileAndRegister(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const imageUrl = event.target.result;
+            registerImage(imageUrl);
+            resolve(); // 処理が完了したらPromiseを解決
+        };
+        reader.readAsDataURL(file);
+    });
 }
 
 function registerImage(imageUrl) {
@@ -134,7 +130,7 @@ function updateImageList() {
         upButton.textContent = "↑";
         upButton.onclick = () => {
             moveImageUp(index);
-            updateImageList(); // 上に移動後にリストを更新
+            updateImageList();
         };
         buttonContainer.appendChild(upButton);
 
@@ -142,7 +138,7 @@ function updateImageList() {
         downButton.textContent = "↓";
         downButton.onclick = () => {
             moveImageDown(index);
-            updateImageList(); // 下に移動後にリストを更新
+            updateImageList();
         };
         buttonContainer.appendChild(downButton);
 
@@ -150,12 +146,12 @@ function updateImageList() {
         deleteButton.textContent = "削除";
         deleteButton.onclick = () => {
             deleteImage(index);
-            updateImageList(); // 削除後にリストを更新
+            updateImageList();
         };
         buttonContainer.appendChild(deleteButton);
 
         imageItem.appendChild(buttonContainer);
-        imageList.appendChild(imageItem); // 画像項目をリストに追加
+        imageList.appendChild(imageItem);
     });
 }
 
