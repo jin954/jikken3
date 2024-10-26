@@ -3,17 +3,16 @@ let currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
 let alarmTime = localStorage.getItem("alarmTime") || '';
 let alarmCheckInterval;
 
-const defaultImage = "default_image.png"; // 初期画像のパス
+const defaultImage = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'><rect width='500' height='500' fill='white'/></svg>";
 
 function loadImage(index) {
     const currentImageElement = document.getElementById("currentImage");
     if (images.length > 0) {
         currentImageElement.src = images[index].url;
     } else {
-        currentImageElement.src = ''; // 画像がない場合は白紙（透明）にする
+        currentImageElement.src = defaultImage; // デフォルトの無地の白背景を使用
     }
 }
-
 
 function nextImage() {
     currentIndex = (currentIndex + 1) % (images.length || 1);
@@ -49,13 +48,14 @@ function saveSettings() {
 
 function startAlarmCheck() {
     clearInterval(alarmCheckInterval);
-    if (!alarmTime) return;
+    if (!alarmTime) return; // アラームが設定されていない場合は処理を終了
 
     alarmCheckInterval = setInterval(() => {
         const now = new Date();
         const [alarmHours, alarmMinutes] = alarmTime.split(":").map(Number);
         if (now.getHours() === alarmHours && now.getMinutes() === alarmMinutes) {
             nextImage();
+            resetSettings(); // アラーム実行後に設定をリセットする場合
         }
     }, 60000); // 1分ごとにチェック
 }
@@ -85,9 +85,9 @@ async function autoSaveImages() {
 
         for (const file of files) {
             await readFileAndRegister(file);
-            updateImageList(); // 各画像登録後にリストを更新
         }
 
+        updateImageList(); // すべての画像が登録された後に一度だけリストを更新
         input.value = ''; // ファイル選択後にクリア
     }
 }
@@ -114,51 +114,8 @@ function updateImageList() {
     imageList.innerHTML = ''; // リスト全体をクリアしてリフレッシュ
 
     images.forEach((image, index) => {
-        const imageItem = document.createElement("div");
-        imageItem.classList.add("image-item");
-
-        const img = document.createElement("img");
-        img.src = image.url;
-        img.width = 50; // サムネイルサイズ
-        img.height = 50;
-        imageItem.appendChild(img);
-
-        const buttonContainer = document.createElement("div");
-        buttonContainer.classList.add("image-item-buttons");
-
-        const upButton = document.createElement("button");
-        upButton.textContent = "↑";
-        upButton.onclick = () => {
-            moveImageUp(index);
-            updateImageList();
-        };
-        buttonContainer.appendChild(upButton);
-
-        const downButton = document.createElement("button");
-        downButton.textContent = "↓";
-        downButton.onclick = () => {
-            moveImageDown(index);
-            updateImageList();
-        };
-        buttonContainer.appendChild(downButton);
-
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "削除";
-        deleteButton.onclick = () => {
-            deleteImage(index);
-            updateImageList();
-        };
-        buttonContainer.appendChild(deleteButton);
-
-        imageItem.appendChild(buttonContainer);
-        imageList.appendChild(imageItem);
+        createImageListItem(imageList, image, index);
     });
-}
-
-
-function updateImageListPartial(index) {
-    const imageList = document.getElementById('imageList');
-    createImageListItem(imageList, images[index], index);
 }
 
 function createImageListItem(imageList, image, index) {
@@ -177,19 +134,25 @@ function createImageListItem(imageList, image, index) {
 
     const upButton = document.createElement("button");
     upButton.textContent = "↑";
-    upButton.onclick = () => moveImageUp(index);
+    upButton.onclick = () => {
+        moveImageUp(index);
+        updateImageList();
+    };
     buttonContainer.appendChild(upButton);
 
     const downButton = document.createElement("button");
     downButton.textContent = "↓";
-    downButton.onclick = () => moveImageDown(index);
+    downButton.onclick = () => {
+        moveImageDown(index);
+        updateImageList();
+    };
     buttonContainer.appendChild(downButton);
 
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "削除";
     deleteButton.onclick = () => {
         deleteImage(index);
-        updateImageList(); // 削除後にリストを更新
+        updateImageList();
     };
     buttonContainer.appendChild(deleteButton);
 
@@ -198,11 +161,15 @@ function createImageListItem(imageList, image, index) {
 }
 
 function deleteImage(index) {
+    if (index < 0 || index >= images.length) return; // 有効なインデックスか確認
+
     images.splice(index, 1);
     localStorage.setItem("images", JSON.stringify(images));
-    updateImageList(); // 画像リストの更新
+
     currentIndex = Math.min(currentIndex, images.length - 1);
     localStorage.setItem("currentIndex", currentIndex);
+
+    updateImageList(); // リストを先に更新
     loadImage(currentIndex); // 現在の画像を更新
 }
 
@@ -225,7 +192,6 @@ function moveImageDown(index) {
         updateImageList();
     }
 }
-
 
 // 時間入力に対するホイール操作を制御
 const timeInput = document.getElementById("alarmTime");
@@ -252,7 +218,6 @@ window.onload = function () {
 
     if (alarmTime) {
         document.getElementById("alarmTime").value = alarmTime;
-        saveSettings();
+        startAlarmCheck(); // 直接アラームチェックを開始
     }
-    startAlarmCheck();
 };
