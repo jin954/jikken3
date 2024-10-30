@@ -27,15 +27,6 @@ function compressImage(imageFile) {
     });
 }
 
-async function readFileAndRegister(file) {
-    try {
-        const compressedImageUrl = await compressImage(file);
-        registerImage(compressedImageUrl);
-    } catch (error) {
-        console.error("画像の登録中にエラーが発生しました:", error);
-    }
-}
-
 function loadImage(index) {
     const currentImageElement = document.getElementById("currentImage");
     if (images.length > 0) {
@@ -141,7 +132,8 @@ async function processImageQueue() {
     while (imageQueue.length > 0) {
         const file = imageQueue.shift();
         try {
-            await readFileAndRegister(file);
+            const compressedImageUrl = await compressImage(file);
+            registerImage(compressedImageUrl);
         } catch (error) {
             console.error("画像の登録中にエラーが発生しました:", error);
         }
@@ -149,35 +141,6 @@ async function processImageQueue() {
 
     updateImageList();
     isProcessingQueue = false;
-}
-
-function deleteImage(index) {
-    if (index < 0 || index >= images.length) return;
-
-    images.splice(index, 1);
-    localStorage.setItem("images", JSON.stringify(images));
-
-    currentIndex = Math.min(currentIndex, images.length - 1);
-    localStorage.setItem("currentIndex", currentIndex);
-
-    loadImage(currentIndex);
-    debounceUpdateImageList();
-}
-
-function moveImageUp(index) {
-    if (index > 0) {
-        [images[index], images[index - 1]] = [images[index - 1], images[index]];
-        localStorage.setItem("images", JSON.stringify(images));
-        debounceUpdateImageList();
-    }
-}
-
-function moveImageDown(index) {
-    if (index < images.length - 1) {
-        [images[index], images[index + 1]] = [images[index + 1], images[index]];
-        localStorage.setItem("images", JSON.stringify(images));
-        debounceUpdateImageList();
-    }
 }
 
 function registerImage(imageUrl) {
