@@ -27,6 +27,16 @@ function compressImage(imageFile) {
     });
 }
 
+async function readFileAndRegister(file) {
+    try {
+        const compressedImageUrl = await compressImage(file);
+        registerImage(compressedImageUrl);
+        updateImageList();
+    } catch (error) {
+        console.error("画像の登録中にエラーが発生しました:", error);
+    }
+}
+
 function loadImage(index) {
     const currentImageElement = document.getElementById("currentImage");
     if (images.length > 0) {
@@ -132,8 +142,7 @@ async function processImageQueue() {
     while (imageQueue.length > 0) {
         const file = imageQueue.shift();
         try {
-            const compressedImageUrl = await compressImage(file);
-            registerImage(compressedImageUrl);
+            await readFileAndRegister(file);
         } catch (error) {
             console.error("画像の登録中にエラーが発生しました:", error);
         }
@@ -144,10 +153,6 @@ async function processImageQueue() {
 }
 
 function registerImage(imageUrl) {
-    if (!imageUrl) {
-        console.warn("無効な画像URLが指定されました。");
-        return;
-    }
     images.push({ url: imageUrl });
     localStorage.setItem("images", JSON.stringify(images));
 }
@@ -204,6 +209,32 @@ function createImageListItem(imageList, image, index) {
 }
 
 const debounceUpdateImageList = debounce(updateImageList, 200);
+
+function deleteImage(index) {
+    if (index < 0 || index >= images.length) return;
+
+    images.splice(index, 1);
+    localStorage.setItem("images", JSON.stringify(images));
+
+    currentIndex = Math.min(currentIndex, images.length - 1);
+    localStorage.setItem("currentIndex", currentIndex);
+
+    loadImage(currentIndex);
+}
+
+function moveImageUp(index) {
+    if (index > 0) {
+        [images[index], images[index - 1]] = [images[index - 1], images[index]];
+        localStorage.setItem("images", JSON.stringify(images));
+    }
+}
+
+function moveImageDown(index) {
+    if (index < images.length - 1) {
+        [images[index], images[index + 1]] = [images[index + 1], images[index]];
+        localStorage.setItem("images", JSON.stringify(images));
+    }
+}
 
 const timeInput = document.getElementById("alarmTime");
 timeInput.addEventListener('wheel', function(event) {
