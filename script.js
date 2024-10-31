@@ -30,8 +30,8 @@ function compressImage(imageFile) {
 function readFileAndRegister(file) {
     return new Promise(async (resolve, reject) => {
         try {
-            const compressedImageUrl = await compressImage(file); // 圧縮処理を追加
-            registerImage(compressedImageUrl); // 圧縮した画像を登録
+            const compressedImageUrl = await compressImage(file);
+            registerImage(compressedImageUrl);
             resolve();
         } catch (error) {
             console.error("画像の登録中にエラーが発生しました:", error);
@@ -153,21 +153,6 @@ async function processImageQueue() {
 
     updateImageList();
     isProcessingQueue = false;
-}
-
-function readFileAndRegister(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-            const imageUrl = event.target.result;
-            registerImage(imageUrl);
-            resolve();
-        };
-        reader.onerror = function () {
-            reject("ファイルの読み取りに失敗しました");
-        };
-        reader.readAsDataURL(file);
-    });
 }
 
 function registerImage(imageUrl) {
