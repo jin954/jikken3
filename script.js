@@ -2,8 +2,8 @@ let images = JSON.parse(localStorage.getItem("images")) || [];
 let currentIndex = parseInt(localStorage.getItem("currentIndex")) || 0;
 let alarmTime = localStorage.getItem("alarmTime") || '';
 let alarmCheckInterval;
-let imageQueue = [];
-let isProcessingQueue = false;
+let imageQueue = []; // 画像登録キュー
+let isProcessingQueue = false; // キュー処理中のフラグ
 
 const defaultImage = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'><rect width='500' height='500' fill='white'/></svg>";
 
@@ -15,11 +15,11 @@ function compressImage(imageFile) {
             img.src = event.target.result;
             img.onload = function() {
                 const canvas = document.createElement('canvas');
-                canvas.width = 200;
-                canvas.height = 200;
+                canvas.width = 200; // サムネイルの幅
+                canvas.height = 200; // サムネイルの高さ
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                resolve(canvas.toDataURL('image/jpeg', 0.7));
+                resolve(canvas.toDataURL('image/jpeg', 0.7)); // 圧縮率70%
             };
         };
         reader.onerror = reject;
@@ -27,22 +27,25 @@ function compressImage(imageFile) {
     });
 }
 
-async function readFileAndRegister(file) {
-    try {
-        const compressedImageUrl = await compressImage(file);
-        registerImage(compressedImageUrl);
-        updateImageList();
-    } catch (error) {
-        console.error("画像の登録中にエラーが発生しました:", error);
-    }
+function readFileAndRegister(file) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const compressedImageUrl = await compressImage(file); // 圧縮処理を追加
+            registerImage(compressedImageUrl); // 圧縮した画像を登録
+            resolve();
+        } catch (error) {
+            console.error("画像の登録中にエラーが発生しました:", error);
+            reject();
+        }
+    });
 }
 
 function loadImage(index) {
     const currentImageElement = document.getElementById("currentImage");
     if (images.length > 0) {
-        currentImageElement.src = images[Math.min(index, images.length - 1)].url;
+        currentImageElement.src = images[index].url;
     } else {
-        currentImageElement.src = defaultImage; // デフォルトの画像を設定する場合
+        currentImageElement.src = defaultImage;
     }
 }
 
@@ -152,6 +155,21 @@ async function processImageQueue() {
     isProcessingQueue = false;
 }
 
+function readFileAndRegister(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const imageUrl = event.target.result;
+            registerImage(imageUrl);
+            resolve();
+        };
+        reader.onerror = function () {
+            reject("ファイルの読み取りに失敗しました");
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
 function registerImage(imageUrl) {
     images.push({ url: imageUrl });
     localStorage.setItem("images", JSON.stringify(images));
@@ -164,11 +182,6 @@ function updateImageList() {
     images.forEach((image, index) => {
         createImageListItem(imageList, image, index);
     });
-
-    // 現在のインデックスがリストの範囲外であれば調整
-    currentIndex = Math.min(currentIndex, images.length - 1);
-    localStorage.setItem("currentIndex", currentIndex);
-    loadImage(currentIndex);  // 画像を再ロード
 }
 
 function createImageListItem(imageList, image, index) {
@@ -224,7 +237,7 @@ function deleteImage(index) {
     currentIndex = Math.min(currentIndex, images.length - 1);
     localStorage.setItem("currentIndex", currentIndex);
 
-    updateImageList();
+    loadImage(currentIndex);
 }
 
 function moveImageUp(index) {
@@ -241,6 +254,7 @@ function moveImageDown(index) {
     }
 }
 
+// 時間入力に対するホイール操作を制御
 const timeInput = document.getElementById("alarmTime");
 timeInput.addEventListener('wheel', function(event) {
     event.preventDefault();
@@ -267,4 +281,4 @@ window.onload = function () {
         document.getElementById("alarmTime").value = alarmTime;
         startAlarmCheck();
     }
-}
+};
