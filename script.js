@@ -42,7 +42,7 @@ function loadImage(index) {
     if (images.length > 0) {
         currentImageElement.src = images[index].url;
     } else {
-        currentImageElement.src = defaultImage;
+        currentImageElement.src = defaultImage; // デフォルトの画像を設定する場合
     }
 }
 
@@ -253,6 +253,7 @@ timeInput.addEventListener('wheel', function(event) {
     timeInput.value = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 });
 
+// 初期化処理
 window.onload = function () {
     loadImage(currentIndex);
     updateImageList();
