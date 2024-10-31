@@ -40,7 +40,7 @@ async function readFileAndRegister(file) {
 function loadImage(index) {
     const currentImageElement = document.getElementById("currentImage");
     if (images.length > 0) {
-        currentImageElement.src = images[index].url;
+        currentImageElement.src = images[Math.min(index, images.length - 1)].url;
     } else {
         currentImageElement.src = defaultImage; // デフォルトの画像を設定する場合
     }
@@ -164,6 +164,11 @@ function updateImageList() {
     images.forEach((image, index) => {
         createImageListItem(imageList, image, index);
     });
+
+    // 現在のインデックスがリストの範囲外であれば調整
+    currentIndex = Math.min(currentIndex, images.length - 1);
+    localStorage.setItem("currentIndex", currentIndex);
+    loadImage(currentIndex);  // 画像を再ロード
 }
 
 function createImageListItem(imageList, image, index) {
@@ -219,7 +224,7 @@ function deleteImage(index) {
     currentIndex = Math.min(currentIndex, images.length - 1);
     localStorage.setItem("currentIndex", currentIndex);
 
-    loadImage(currentIndex);
+    updateImageList();
 }
 
 function moveImageUp(index) {
@@ -262,4 +267,4 @@ window.onload = function () {
         document.getElementById("alarmTime").value = alarmTime;
         startAlarmCheck();
     }
-};
+}
