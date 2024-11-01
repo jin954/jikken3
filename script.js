@@ -12,20 +12,38 @@ function compressImage(imageFile) {
         const reader = new FileReader();
         reader.onload = function(event) {
             const img = new Image();
-            img.src = event.target.result;
             img.onload = function() {
                 const canvas = document.createElement('canvas');
                 canvas.width = 200; // サムネイルの幅
                 canvas.height = 200; // サムネイルの高さ
                 const ctx = canvas.getContext('2d');
+
+                // 背景を白で塗りつぶす
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // 画像をキャンバスに描画
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                // 圧縮した画像データを取得
                 resolve(canvas.toDataURL('image/jpeg', 0.7)); // 圧縮率70%
             };
+
+            img.onerror = function() {
+                reject(new Error("画像の読み込みに失敗しました"));
+            };
+
+            img.src = event.target.result; // img.srcの設定を最後に行う
         };
-        reader.onerror = reject;
+
+        reader.onerror = function() {
+            reject(new Error("ファイルの読み込みに失敗しました"));
+        };
+
         reader.readAsDataURL(imageFile);
     });
 }
+
 
 function readFileAndRegister(file) {
     return new Promise(async (resolve, reject) => {
