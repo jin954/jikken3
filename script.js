@@ -22,8 +22,27 @@ function compressImage(imageFile) {
                 ctx.fillStyle = 'white';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // 画像をキャンバスに描画
-                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                // 画像のアスペクト比を維持して、キャンバス全体に収める
+                const imgAspectRatio = img.width / img.height;
+                const canvasAspectRatio = canvas.width / canvas.height;
+                let sx, sy, sWidth, sHeight;
+
+                if (imgAspectRatio > canvasAspectRatio) {
+                    // 画像が横に長い場合は左右を切り取る
+                    sWidth = img.height * canvasAspectRatio;
+                    sHeight = img.height;
+                    sx = (img.width - sWidth) / 2;
+                    sy = 0;
+                } else {
+                    // 画像が縦に長い場合は上下を切り取る
+                    sWidth = img.width;
+                    sHeight = img.width / canvasAspectRatio;
+                    sx = 0;
+                    sy = (img.height - sHeight) / 2;
+                }
+
+                // キャンバスに画像を描画
+                ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 
                 // 圧縮した画像データを取得
                 resolve(canvas.toDataURL('image/jpeg', 0.7)); // 圧縮率70%
