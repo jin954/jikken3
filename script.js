@@ -90,8 +90,7 @@ function startAlarmCheck() {
         const [alarmHours, alarmMinutes] = alarmTime.split(":").map(Number);
         if (now.getHours() === alarmHours && now.getMinutes() === alarmMinutes) {
             nextImage();
-            resetSettings();
-        }
+            }
     }, 60000);
 }
 
