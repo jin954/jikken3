@@ -7,6 +7,7 @@ let isProcessingQueue = false; // キュー処理中のフラグ
 
 const defaultImage = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'><rect width='500' height='500' fill='white'/></svg>";
 
+// 圧縮用の関数
 function compressImage(imageFile) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -14,8 +15,9 @@ function compressImage(imageFile) {
             const img = new Image();
             img.onload = function() {
                 const canvas = document.createElement('canvas');
-                canvas.width = 200; // サムネイルの幅
-                canvas.height = 200; // サムネイルの高さ
+                // キャンバスサイズを調整（必要に応じて変更）
+                canvas.width = 500; // 例: 500px幅
+                canvas.height = 500; // 例: 500px高さ
                 const ctx = canvas.getContext('2d');
 
                 // 背景を白で塗りつぶす
@@ -45,7 +47,7 @@ function compressImage(imageFile) {
                 ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 
                 // 圧縮した画像データを取得
-                resolve(canvas.toDataURL('image/jpeg', 0.7)); // 圧縮率70%
+                resolve(canvas.toDataURL('image/jpeg', 0.8)); // 圧縮率80%
             };
 
             img.onerror = function() {
@@ -62,7 +64,6 @@ function compressImage(imageFile) {
         reader.readAsDataURL(imageFile);
     });
 }
-
 
 function readFileAndRegister(file) {
     return new Promise(async (resolve, reject) => {
@@ -81,8 +82,17 @@ function loadImage(index) {
     const currentImageElement = document.getElementById("currentImage");
     if (images.length > 0) {
         currentImageElement.src = images[index].url;
+        // 画像の表示スタイルを設定
+        currentImageElement.style.width = "100%"; // 親要素に合わせて幅を100%に設定
+        currentImageElement.style.height = "auto"; // 高さは自動調整
+        currentImageElement.style.objectFit = "contain"; // 画像のアスペクト比を維持
+        currentImageElement.style.backgroundColor = "white"; // 背景色を白に設定
     } else {
         currentImageElement.src = defaultImage;
+        currentImageElement.style.width = "100%";
+        currentImageElement.style.height = "auto";
+        currentImageElement.style.objectFit = "contain";
+        currentImageElement.style.backgroundColor = "white";
     }
 }
 
@@ -127,8 +137,9 @@ function startAlarmCheck() {
         const [alarmHours, alarmMinutes] = alarmTime.split(":").map(Number);
         if (now.getHours() === alarmHours && now.getMinutes() === alarmMinutes) {
             nextImage();
-            }
-    }, 60000);
+            resetSettings();
+        }
+    }, 60000); // 1分ごとにチェック
 }
 
 function resetSettings() {
@@ -300,6 +311,12 @@ window.onload = function () {
 
     if (alarmTime) {
         document.getElementById("alarmTime").value = alarmTime;
+        document.getElementById("saveAlarm").textContent = "設定済み";
+        document.getElementById("saveAlarm").disabled = true;
+        document.getElementById("resetAlarm").style.display = "inline";
+        document.getElementById("alarmTime").disabled = true;
         startAlarmCheck();
+    } else {
+        document.getElementById("resetAlarm").style.display = "none";
     }
 };
