@@ -10,7 +10,6 @@ body {
     width: 100%;
     max-width: 500px; /* 最大幅を設定 */
     height: auto; /* 高さを自動調整 */
-    border: 2px solid black;
     margin: 20px auto;
     position: relative;
     background-color: white;
