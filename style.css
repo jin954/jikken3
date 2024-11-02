@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     text-align: center;
     margin: 0;
     padding: 0;
@@ -12,7 +12,7 @@ body {
     height: auto; /* 高さを自動調整 */
     margin: 20px auto;
     position: relative;
-    background-color: white;
+    background-color: #ffffff;
     overflow: hidden;
 }
 
