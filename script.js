@@ -7,7 +7,6 @@ let isProcessingQueue = false; // キュー処理中のフラグ
 
 const defaultImage = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'><rect width='500' height='500' fill='white'/></svg>";
 
-// 圧縮用の関数
 function compressImage(imageFile) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -15,39 +14,27 @@ function compressImage(imageFile) {
             const img = new Image();
             img.onload = function() {
                 const canvas = document.createElement('canvas');
-                // キャンバスサイズを調整（必要に応じて変更）
-                canvas.width = 500; // 例: 500px幅
-                canvas.height = 500; // 例: 500px高さ
+                const canvasSize = 300; // サムネイルのサイズ
+                canvas.width = canvasSize;
+                canvas.height = canvasSize;
                 const ctx = canvas.getContext('2d');
 
                 // 背景を白で塗りつぶす
                 ctx.fillStyle = 'white';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // 画像のアスペクト比を維持して、キャンバス全体に収める
-                const imgAspectRatio = img.width / img.height;
-                const canvasAspectRatio = canvas.width / canvas.height;
-                let sx, sy, sWidth, sHeight;
-
-                if (imgAspectRatio > canvasAspectRatio) {
-                    // 画像が横に長い場合は左右を切り取る
-                    sWidth = img.height * canvasAspectRatio;
-                    sHeight = img.height;
-                    sx = (img.width - sWidth) / 2;
-                    sy = 0;
-                } else {
-                    // 画像が縦に長い場合は上下を切り取る
-                    sWidth = img.width;
-                    sHeight = img.width / canvasAspectRatio;
-                    sx = 0;
-                    sy = (img.height - sHeight) / 2;
-                }
+                // 画像のアスペクト比を維持して、キャンバスに収まるように調整
+                const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+                const scaledWidth = img.width * scale;
+                const scaledHeight = img.height * scale;
+                const offsetX = (canvas.width - scaledWidth) / 2;
+                const offsetY = (canvas.height - scaledHeight) / 2;
 
                 // キャンバスに画像を描画
-                ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, img.width, img.height, offsetX, offsetY, scaledWidth, scaledHeight);
 
-                // 圧縮した画像データを取得
-                resolve(canvas.toDataURL('image/jpeg', 0.8)); // 圧縮率80%
+                // 圧縮した画像データを取得（品質を80%に設定）
+                resolve(canvas.toDataURL('image/jpeg', 0.8));
             };
 
             img.onerror = function() {
@@ -64,6 +51,7 @@ function compressImage(imageFile) {
         reader.readAsDataURL(imageFile);
     });
 }
+
 
 function readFileAndRegister(file) {
     return new Promise(async (resolve, reject) => {
