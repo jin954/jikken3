@@ -1,36 +1,59 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>カウントダウンウィジェット</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画像スライダーウィジェット</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="countdown-container">
-    <!-- 日数表示エリア -->
-    <div class="image-container">
-      <div class="day-count" id="dayCount">30</div>
+    <div class="image-container" id="imageContainer">
+        <img src="default_image.png" id="currentImage" class="image" alt="画像表示エリア">
+    </div>
+    
+    <div class="control-buttons">
+   <span class="triangle-button" onclick="prevImage()">&#9664;</span>
+   <span class="diamond-button" onclick="openSettings()">&#9670;</span> <!-- ◆に変更 -->
+   <span class="triangle-button" onclick="nextImage()">&#9654;</span>
+</div>
+
+
+
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeSettings()">&times;</span>
+            <h2>設定</h2>
+
+            <!-- アラーム設定 -->
+            <div class="alarm-settings">
+                <label>時間 :</label>
+                <input type="time" id="alarmTime" class="input-time" value="00:00">
+                <button id="saveAlarm" onclick="saveSettings()">保存</button>
+                <button id="resetAlarm" style="display:none;" onclick="resetSettings()">リセット</button>
+            </div>
+
+            <br>
+
+            <!-- 画像アップロードセクション -->
+            <div class="file-upload-container">
+                <label for="uploadImage">画像 :</label>
+                <input type="file" id="uploadImage" accept="image/*" multiple style="display:none;" onchange="autoSaveImages()">
+                <button type="button" onclick="document.getElementById('uploadImage').click()">ファイルを選択</button>
+            </div>
+
+            <br>
+
+            <!-- 登録済み画像リスト -->
+            <h3>登録済み画像</h3>
+            <div id="imageListContainer">
+                <div id="imageList"></div>
+            </div>
+
+            <br>
+            <button class="close-button-bottom" onclick="closeSettings()">閉じる</button>
+        </div>
     </div>
 
-    <!-- ボタンエリア -->
-    <div class="button-container">
-      <button id="settingsButton">♦</button>
-      <button id="completeButton">1日完了</button>
-    </div>
-  </div>
-
-  <!-- 設定画面（ポップアップ） -->
-  <div class="popup-overlay" id="popupOverlay">
-    <div class="popup">
-      <h2>設定画面</h2>
-      <label for="daysInput">日数を設定:</label>
-      <input type="number" id="daysInput" min="1" value="30">
-      <button id="applyButton">適用</button>
-      <button id="closeButton">閉じる</button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
